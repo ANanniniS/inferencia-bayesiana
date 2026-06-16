@@ -1,0 +1,15 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.ilg
+*.ind
+*.out
+*.blg
+*.bbl
+
+# Optional: Ignore the generated PDF if you only want to store the code source
+# *.pdf

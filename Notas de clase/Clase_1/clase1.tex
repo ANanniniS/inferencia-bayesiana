@@ -1,0 +1,274 @@
+
+\chapter{La probabilidad: Un \'algebra subjetivo}
+En practicamente cualquier proceso que requiera donde podamos utilizar matemática para describir la realidad -ya sea la cuantización de la longitud de una mesa o intentar hacer una predicción sobre el valor de una acción- siempre lo que hacemos es tener que simplificarla lo máximo posible. Pero en esta simplificación queremos mantener la información relevante en lo que respecta a las conclusiones que pretendemos sacar. Si medimos una mesa, pensamos a la distancia como la distancia de un borde a otro. En este contexto, bajo ningún concepto uno debería medir la distancia entre cada uno de los átomos que componen la el borde la tabla de la mesa\footnote{Léase la paradoja de la línea de costa}. 
+
+Esta simplificación viene de la mano de elegir alguna estructura algebráica que describa lo que necesitemos y que contenga toda la información que sea relevante en la fenomenología que estemos analizando. En el caso de la longitud de la mesa, la estructura que vamos a tomar son los reales $\mathbb{R}$, aunque también podríamos tomar los reales positivos\footnote{¿Por qué no podríamos tomar a los racionales $\mathbb{Q}$?}. Pero no solo vamos a pretender que la estructura sea capaz de describir el estado de algo, también pretendemos que los elementos estén relacionados unos con otros. De nada nos serviría si cada número real estuviera desconexo y desordenado de los demás. No es una imagen útil pensar a los números como dispersos en un espacio como si lo es pensarlos en una recta. Este ordenamiendo gráfico no lo podemos hacer con cualquier conjunto -no al menos tan bien motivado como lo podemos hacer con $\mathbb{R}$. Esta gráfica es posible debido a que los reales están estructurados, y su estructura viene de sus operaciones básicas $(+, \cdot)$ y una noción de orden $(<)$. Estas operaciones y noción de orden se definen abstractamente sin que representen algo físico o real. 
+
+Básicamente siempre podemos armar conjuntos y estructurarlo con operaciones, relaciones de orden y otras cosas, y por sí mismo este proceso siempre va a tener sentido. Pero el problema es que no necesariamente las estructuras algebráicas resultantes van a representar algo de la realidad. No solo vamos a pretender codificar el estado actual de lo que modelemos, también vamos a pretender que las operaciones estén bien motivados. En el caso de la mesa, las operaciones sobre el conjunto abstracto de los reales coincide con lo que esperariamos se relacionen las longitudes de mesas combinadas.
+
+En general todo proceso de modelado tiene implícito más o menos los siguientes pasos
+\begin{enumerate}
+    \item Simplificación de aquello que queremos modelar. Nos quedamos la información que nos parezca relevante.
+    \item Elección de una estructura algebráica que codifique aquella información. Pretendemos que esta estructura tenga operaciones que relacionen a sus elemenetos de una forma que este motivada por como se relacionan aquellos estados de lo que estamos modelando.
+    \item Una vez que ya abstraimos el problema sencillamente confiamos en las operaciones. Manipulamos algebráicamente las expresiones -o lo que sea que tengamos- sin estar pensando en que representan en cada paso intermedio hasta que llegamos a las conclusiones que estabamos buscando en un principio.
+\end{enumerate}
+Por supuesto, uno tiene que elegir lo que modela y cómo en base a las conclusiones que pretende sacar. Además confiar ciegamente en los resultados puede ser un poco iluso porque el modelo puede fallar -sin mencionar que podemos tener errores. Por lo tanto cierto grado de intuición sobre lo que estamos modelando suele ser muy útil para ver si los resultados son directamente descartables.
+
+Otros ejemplos en niveles crecientes de abstracción:
+\begin{itemize}
+    \item Si queremos modelar cantidades de personas la estructura algebráica más ajustada serían los números naturales -$\mathbb{N}$. Cada posible cantidad de número de personas tiene un número asociado y sus operaciones están bien motivadas. La suma representa cuantas personas tendría un grupo que consista en la unión de dos subgrupos de personas. Y por supuesto, la multiplicación sería la unión de muchos grupos con la misma cantidad de personas.
+    \item Si quisieramos modelar la distancia que recorre un taxi la distancia euclidea no nos sería de mucha ayuda pues es la distancia que recorrería una paloma, no un auto. Para esto existe una estructura algebráica que abstrae la noción de distancia llamada espacios métricos. Esta estructura consiste en un conjunto $\mathbb{X}$ y una operación $m:\mathbb{X}\times \mathbb{X}\to \mathbb{R}$ que satisface ciertas propiedades que debería satisfacer una distancia como mínimo.
+    \item Un ejemplo poco discutido es la abstracción de la temperatura como un número real. En este caso la operación suma no está tan bien definida como uno esperaría dado que el resultado de la suma va a depender de las unidades que estemos utilizando y esto lleva a paradojas (no es lo mismo sumar en Kelvin que en Celcius porque tienen el origen desplazado). Uno se podría preguntar en contraposición por qué deberíamos sumar temperaturas. La realidad es que esta suma no tiene significado desde el punto de la vista de la teoría de termodinámica, de hecho lo que si tiene mucho más sentido -y por tanto es independiente de unidades- es la diferencia de temperaturas. 
+    
+    Uno podría interesarse en la suma si lo que prentende es promediarlas por ejemplo. Justo en el ejemplo en cuestion, el promedio coincidirá independiente de las unidades utilizadas porque están relacionadas de forma lineal -aunque no homogeneamente. Pero el promedio no tiene por qué ser independiente de cualquier cambio de coordenadas, de hecho frente a cambios de coordenadas más generales en ningún contexto lo es. Pero sea como sea, lo que uno pretende del promedio en estadística al final es una medida de centralidad de un conjunto de datos.
+    \item Uno puede conceptualizar a una imagen digital en blanco y negro con $n$ pixeles de ancho y $m$ de largo como una matriz real de $n\times m$. En principio, para guardar la imagen en la computadora uno no necesita definir mayores operaciones. Sin embargo es de utilidad es asignarle operaciones al conjunto de matrices para la realización de ciertas aplicaciones -como {\it computer vision}. Operaciones de mucha utilidad son las dadas por la estructura de los espacios vectoriales, donde definimos las operaciones suma de matrices y producto por un número. Otras operaciones útiles son el producto punto, las convoluciones, etc. De hecho, la estrucutra de los espacios vectoriales es de gran utilidad en multiples circunstancias -de momento es casi omnipresente en Machine Learning.
+\end{itemize}
+
+En particular, la estructura algebráica protagonista de este curso es la de ``{\it Espacio de probabilidad}''. Esta estructura fue desarrollada por Andréi Kolmogorov en 1933 con lo que en la literatura se suele denominar a este conjunto axiomático ``Axiomas de Kolmogorov'' \cite{kolmogorov1933grundbegriffe,kolmogorov1956foundations}. El gran logro de Kolmogorvo fue formalizar en una teória basada en conjuntos -que son el fundamento de las matemáticas desde el siglo pasado- el lenguaje de probabilidad que se viene desarrollando desde el siglo XVIII.
+
+Gran parte de estas estructuras algebráicas son más díficiles de entender que lo que modelan y la ganancia está en que una vez entendida la estructura podemos manejarnos en el nivel de abstracción que nos quede cómodo. Pero en teoría de probabilidad eso es muy diferente. De alguna forma, el algebra de la probabilidad codifican matemáticamente nuestra información, lo que es mucho más abstracto que la longitud de una mesa, la cantidad de personas de un grupo, la distancia que recorre un taxi, una temperatura o una imagen en blanco y negro. De hecho, hay muchas interpretaciones de lo que significa ``la probabilidad de algo'' y eso es lo que estudiaremos a continuación.
+
+\section{Los espacios de probabilidad}
+
+
+\begin{definition}
+    Un {\bf espacio muestral} $\mathbb{X}$ es el conjunto de todos los resultados posibles de un experimento. Un {\bf evento} es un subconjunto de este.
+\end{definition}
+\begin{definition}
+    Dado un espacio muestral $\mathbb{X}$, un {\bf espacio de eventos}\footnote{o $\sigma$-álgebra o álgebra de Boorel.}  es un conjunto $\Sigma$ compuesto de eventos del muestral que satisface las siguientes propiedades
+    \begin{itemize}
+        \item 
+        \begin{equation}
+            \mathbb{X}\in \mathbb{B};
+        \end{equation}
+        \item 
+        \begin{equation}
+            A\in\Sigma \implies A^c \in \Sigma;
+        \end{equation}
+        \item Dada una familia de eventos $A_i$ con $i\in I$,
+        \begin{equation}
+            A_i\in\Sigma \implies \bigcup_{i\in I} A_i \in \Sigma.
+        \end{equation}
+    \end{itemize}
+\end{definition}
+\begin{definition}
+    Dado un espacio muestral $\mathbb{X}$, un espacio de eventos asociado $\Sigma$ y una función $P:\Sigma\to \mathbb{R}$ que llamaremos {\bf función de probabilidad}. Se dice que la terna $(\mathbb{X},\Sigma,P)$ forman un {\bf espacio de probabilidad} si la función $P$ satisface los siguientes axiomas:
+    \begin{itemize}
+        \item 
+        \begin{equation}
+            P(\mathbb{X}) = 1;
+        \end{equation}
+        \item $\forall A \in \Sigma$,
+        \begin{equation}
+            P(A)\geq 0;
+        \end{equation}
+        \item Dada una familia de eventos disjuntos $A_i$ con $i\in I$,
+        \begin{equation}
+            P\left( \bigcup_{i\in I} A_i \right) = \sum_{i\in I}P(A_i).
+        \end{equation}
+    \end{itemize}
+\end{definition}
+
+Ya definidas las propiedad fundamentales de la función de probabilidad, se puede entender por qué se eligieron aquellos axiomas para el conjunto de eventos. Son sencillamente aquellos que hacen que siempre tengan sentido los axiomas -o el álgebra- de la función de probabilidad.
+
+Otras definiciones y conceptos básicos relevantes que deberían estar claros a esta altura son los de {\bf variable aleatoria}, {\bf valor medio}, {\bf momentos}, {\bf distribuciones discretas y continuas}. Y aunque estos sean conceptos probablemente más sofisticados del que vamos a debatir a continuación, lo cierto es que la siguiente definición es la reina de esta de materia:
+\begin{definition}
+    Dado un espacio de probabilidad $(\mathbb{X},\Sigma,P)$ y dos eventos $A, B\in \Sigma$ tal que $P(B) \neq 0$, se define {\bf la probabilidad de $A$ dado $B$} como
+    \begin{equation}
+        P(A|B) = \frac{P(A,B)}{P(B)}.
+    \end{equation}
+\end{definition}
+Y de ella sale trivialmente el gran teorema que le da el nombre a la materia:
+\begin{theorem}
+    Dado un espacio de probabilidad $(\mathbb{X},\Sigma,P)$ y dos eventos $A, B\in \Sigma$ con probabilidades no nulas vale que
+    \begin{equation}
+        P(A|B) = \frac{P(B|A)P(A)}{P(B)}
+    \end{equation}
+\end{theorem}
+
+ Como dijimos, si nosotros nos inventamos un conjunto con operaciones que satisfacen ciertas normas, las sigue y listo. No nos tenemos que gastar en justificar por qué elegimos lo que elegimos. El probablema es que no pretendemos armar una estructura algebráica y listo. Lo que queremos lograr es una manera de cuantificar lo que entendemos por probabilidad. Y esto es particularmente dificil no solo de un lado matemático, sino de uno filosófico, pues nadie tiene muy claro que es lo que entendemos por probabilidad y ahí nacen muchas de sus interpretaciones que terminan justificando esta elección de axiomas.
+\section{Interpretaciones de la probabilidad.}
+\subsection{Interpretación clásica}
+Esta interpretación es un producto de la motivación de donde nace la teoría de probabilidad, mucho antes de su axiomatización. Blaise de Pascal y Pierre de Fermat son considerados padres de esta teoría por formalizar matemáticamente esta primera interpretación. Y el problema que querían abordar era entender cuando convenía o no apostar\footnote{Problemática fundamental de la existencia humana}. Entonces, como el azar de la mayoría de juegos de apuestas depende del resultado de una tirada de cartas o de dados, hay cierta simetría entre todos los resultados posibles. De allí nace el ``{\it principio de Laplace}'' que indica que:
+\begin{center}
+    {\it
+    ``Si un conjunto de resultados es posible y no hay razones adicionales para suponer una mayor ocurrencia de uno de ellos entonces la probabilidad de cada resultado debe ser la misma''
+    }
+\end{center}
+Esto nos lleva a una de las formulas más típicas de teoría de probabilidad,
+\begin{equation}
+   \text{ Probabilidad de un caso favorable} = \frac{{\text{Número de casos favorables}}}{\text{Número de casos totales}}.
+   \label{1:eq:fav}
+\end{equation}
+Nuevamente, en el contexto de juegos de azar que incluyen dados y cartas esta interpretación es sólida debido a que es relativamente sencillo entender a los eventos como uniones finitas de casos posibles simétricos. Una ventaja de esta interpretación es que reduce el calculo de probabilidades al de combinatoria. Otra es que si partimos de una definición de probabilidad basada exclusivamente en la ecuación (\ref{1:eq:laplace}) entonces podríamos motivar los axiomas de Kolmogorov y la definición de probabilidad condicional de forma muy sencilla. Tampoco se podría negar su valor práctico y didáctico.
+
+Esta interpretación tiene el problema que es bastante rígida cuando queremos ampliar el marco de uso de las probabilidades. Por ejemplo si quisieramos hablar de un dado cargado ya no podríamos dividir al espacio en casos simétricos. Otro problema también aparecería cuando quisieramos hablar de probabilidad en el caso continuo, donde la probabilidad no recae sobre puntos del espacio muestral sino que la información se codifica en una densidad de probabilidad.
+\subsection{Interpretación frequentista}
+La siguiente interpretación fue la hegemónica del siglo XX. Supongamos que cierto contexto da pie a que suceda, o no, un evento $A$. La interpretación frequentista indica que la probabilidad de $A$ debe ser
+\begin{equation}
+    P(A) = \frac{\text{Número de veces que sucedió $A$}}{\text{Número de veces que pudo haber sucedido $A$}},
+\end{equation}
+cuando el número de veces que pudo haber sucedido $A$ tiende a infinito.
+
+La gran ventaja de esta interpretación es que la probabilidad en este contexto es objetiva y bien medible, casi que desprecia la abstracción y pone en la poltrona resultados de experimentos que se pueden repetir. 
+
+Frente a la interpretación de probabilidad clásica tiene grandes ventajas. Permite extender el marco teórico a situaciones más amplias donde el espacio muestral no se reduce a eventos equiprobables y podemos afrontar un rango de problemas más amplio que ahora puede incluir dados cargados y distribuciones continuas.
+
+Esta interpretación va a tener un problema teoricamente grave, que es por supuesto, el problema de la repetición. En primer lugar es claro que nunca se tienen infinitas repeticiones de un mismo experimento o contexto. Pero ignorando esto -que hay que admitir puede interpretarse como una crítica un tanto superflua- y considerando que aproximamos el límite por la situación estacionaria a la que se puede -o no- llegar después de hacer muchas repeticiones. Y aún así tenemos dos problemas: ¿Qué hacemos con experimentos que nos se pueden repetir? y ¿Qué es exactamente repetir un experimento?
+
+Esta ya no es una crítica superflua, en muchas situaciones vamos a querer asignar probabilidades a situaciones que pueden ocurrir o no hacerlo una única vez:
+\begin{itemize}
+    \item ¿Mañana llueve o no?
+    \item Si mañana cae un meteorito;
+    \item Si el Coronel Mostaza fue el que asesinó a el Dr. Black;
+    \item El ganador de las elecciones en 2027 y
+    \item  un largo etc.
+\end{itemize}
+
+Más aún, en la mayor parte de lo fenómenos que vamos a querer estudiar y podamos analizar mediante su repetición la azarocidad va a depender específicamente de aquellos aspectos que no vamos a poder repetir. Por ejemplo, de tirar una moneda si repetimos exactamente las mismas condiciones iniciales que incluyen cómo apoyamos la moneda en el dedo, como lo movemos para arrajorla al aire, el estado de partícula de aire que choca contra ella y el momento y modo de agarre entonces vamos a obtener el mismo resultado. Y esto no es meramente teórico, según las leyes de la mecánica clásica todos los fenómenos a los que nos enfrentamos son deterministas\footnote{Leasé acerca del demonio de Laplace}.
+
+Esta cuestión acerca de la repetibilidad de los experimentos lleva a considerar que hay dos tipos de fenomelogías en juego en la realización experimental repetida: una contextual en la vamos a volcar la repetibilidad del experimento y otra ruidosa donde van a estar todas aquellas cosas de las que no tenemos información. Aunque por supuesto, su diferencia excede el control el experimental y recae en hace suposiciones sobre el ruido del cual no se tiene ningún control. Por lo que este último en general escondé toda aquella información no accesible.
+
+Esta interpretación llega a los axiomas de Kolmogorov y la probabilidad condicional mediante considerar los límites asíntoticos de los eventos.
+\subsection{Interpretación bayesiana}
+Rondan los 1740s y el filosofo David Hume publica un famoso ensayo filosófico alegando que es más probable que un supuesto testigo mienta a que haya realmente haya ocurrido un milagro. En respuesta a esto el reverendo Thomas Bayes va a defender la racionalidad de la fé armando y escribiendo un marco matemático que muestra como nueva evidencia debe modificar nuestras creencias actuales. Esto se va a codificar matemáticamente como su gran teorema aunque no sea él que va a publicar su propio trabajo, sino que lo hará su amigo Richard Price luego de su muerte, después de que Laplace haya llegado a el de forma independiente.
+
+Hoy en día, no se le adjudica la demostración del teorema de Bayes a Bayes, sino a Laplace. Pero la interpretación de Bayes es lo que lo hace algo diferente, motiva a la probabilidad como una cuantificación de las creencias y la probabilidad condicional a la actualización racional de estas frente a nueva evidencia. Digamos que el enunciado clave de la interpretación bayesiana de la probabilidad es que 
+\begin{center}
+    {\it
+    ``La probabilidad de cierto evento $A$ es subjetiva e indica el grado de certeza que tenemos acerca de $A$''
+    }
+    \label{1:eq:laplace}
+\end{center}
+
+El gran problema que va a tener esta interpretación es que la probabilidad va a dejar de ser algo objetivo y facilmente medible y solo va a caracterizar nuestros grados de creencias sobre ciertos resultados. Pero de hecho, este fue un problema que siempre tuvimos, siempre había que realizar cierta hipótesis sobre la fenomelogía que estabamos estudiando y lo que nos posibilitaban otras interpretaciones era barrer esta necesidad hipotesis debajo de la alfombra. 
+
+De hecho, en este contexto se entiende mejor a que nos referimos exactamente con repetibilidad de experimentos de la interpretación frecuentista. Hay cierto contexto que nos brinda cierta información y sobre esto hay fenomenología sobre la cual no entendemos su comportamiento. Sujeto a la información que tenemos vamos a tener cierto grado de certeza sobre los posibles resultados y la repetición esta en que volvamos a realizar el experimento con la misma información. 
+
+El autor Cox va a intentar llevar aún más lejos de lo esperado el campo de acción de la probabilidad y va a armar aparte una estructura matemática que denomina plausibilidad. En esta va a pedir ciertas propiedades de lo que uno esperaría que respete una noción cuantitiva la certeza sobre eventos y eventualmente va a llegar con demostraciones a la noción de probabilidad kolmogoroviana con su definición de probabilidad condicional -que indica como actualizar nuestras creencias frente a evidencia. De hecho va a hacer que la probabilidad también se defina sobre proposiciones lógicas\cite{cox1961algebra}. Sobre su camino va a seguir el físico norteamericano Edwin Thompson Jaynes en una de las más celebres obras de la teoría de probabilidad ``Probability Theory: The Logic of Science''\cite{jaynes2003probability}.
+
+Esta interpretación es particularmente útil en el área de ciencia de datos, particularmente porque vamos a pensar a las distribuciones de probabilidad como resultado de actualizar nuestras creencias frente a nueva evidencia aplicando el teorema de Bayes. De hecho, como vamos a debatir a continuación la inferencia tiene más sentido en un contexto bayesiano, debido a que la repetición experimental es a efectos prácticos imposible y vamos a necesitar una teoría de probabilidad subjetiva -en base a la información con la que se cuenta- y no objetiva -como brindaría la interpretación frecuentista.
+
+Por supuesto, hay veces que la repetición de un experimento tiene muy bien caracterizadas los impactos del contexto y el ruido por lo que la repetición se vuelve algo viable y analizable desde la teoría de probabilidad. En este contexto e interpretación las probabilidades todavía representarían un grado de creencia sobre los resultados. Pero aún así, de hacer una afírmación científica reportar un grado de creencia no es sufiente puesto que queremos hacer predicciones. Lo que nos lleva a pretender aparte, que la probabilidad coincida simultaneamente con aquella obtenida por la interpretación frecuentista.
+
+Solo por mencionarlo, el mundo moderno cuenta con una teoría cientifica que indica que en condiciones iniciales idénticas se pueden obtener resultados diferentes y cuyas predicciones son probabilísticas independiente de nociones de ruido. Este es el caso de la mecánica cuántica, que al ser una teoría científica necesita ser examinada con criterios objetivos para analizar sus predicciones. Más aún considerando que pretende ser una teoría fundamental del universo y la realidad. En este caso se debe volver a interpretar a la probabilidad en el sentido frecuentista, de lo contrario las predicciones de la mecanica cuántica solo serían grados de creencia, lo que pondría en jaque su falseabilidad.
+
+\subsubsection{La probabilidad como extensión de la lógica: el empirismo}
+Como dije en la sección anterior Cox y Jaynes pretenden extender las nociones de probabilidad a la lógica. Y con esto van a lograr enmarcar muchos razonamientos típicos válidos pero que no están contemplados en la lógica.
+
+En el álgebra booleana, se les asigna a ciertas proposiciones el caracter de verdadero o falso aunque también, más conveniente este texto, 1 o 0 respectivamente. Supongamos que tenemos tres proposiciones $A$, $B$ y $C := A\to B$. Si $A$ y $C$ resultan ciertas podemos hacer el sigilogismo
+\begin{center}
+    $\begin{array}{c}
+        A \\
+        A \to B \\
+        \hline
+        \therefore B
+    \end{array}$
+\end{center}
+Sin embargo, si $B$ y $C$ son ciertas no podemos asumir que $A$ lo sea. Y está bien que sea así, pero en general si se cumplen estas dos condiciones típicamente aumenta la plausibilidad de $A$. Sobre esto Jaynes da el siguiente ejemplo en su libro
+\begin{center}
+    {\it
+    Supongamos que en una noche oscura, un policia camina por una calle aparentemente vacía. De pronto escucha una alarma de robo, mira al otro lado de la calle, y ve a una joyería con la ventana rota. Luego un caballero llevando una mascara sale gateando a través de la ventana rota cargando una bolsa que resulta estar llena de joyas preciosas. El policía no duda en decidir que el caballero es deshonesto. Pero ¿Por qué proceso él llega a esta conclusión?
+    }
+\end{center}
+Si somos cuidadosos, vemos que el policía no llega mediante lógica booleana o un razonamiento puramente lógico a la conclusión que llega. Si no que, mediante agregar nueva evidencia se va haciendo más plausible que el otro personaje sea en realidad un ladrón.
+
+Esta situación ejemplifica algo muy típico, que es que en general queremos inferir que tan plausible es $A$ a partir de las consecuencias que tiene que si podemos ver directamente. Y como solo contamos con la proposición $A\to B$, la lógica no alcanza para asumir $A$ en base a $B$. Otra situación típica es que queremos corroborar una hipóotesis ($A$), de ser cierta la teoría lleva a ciertas conclusiones ($A\to B$ con valor verdadero). Luego revisamos si es cierto $B$ y de serlo, entonces esto es evidencia de que $A$ es cierta. Nuevamente, la lógica no ampara este sigilogismo y aún así es idea principal detrás del empirismo científico.
+
+Lo que proponen Cox y Jaynes es considerar la plausibilidad normalizada $P$ (o la probabilidad directamente) de $A$ y $B$. Si $\Omega$ es una proposición, su plausibilidad es $P(\Omega)$, de ser cierta $P(\Omega)=1$ y de ser falsa $P(\Omega)=0$. A diferencia de la lógica booleana, vamos a permitir valores de lógica intermedios entre 0 y 1.
+
+Con estas nociones vayamos al sigilogismo problemático. Sabemos que $A\to B$ y se puede escribir matematicamente como
+\begin{equation}
+    P(B|A) = 1,
+\end{equation}
+pues nuestra plausiblidad de este hecho es segura. Ahora además descubrimos que $B$ es verdadera, con lo que tenemos nueva evidencia y debemos actualizar la plausibilidad de $A$ con el teorema de Bayes,
+\begin{equation}
+    P(A|B) = \frac{P(B|A)}{P(B)}P(A) = \frac{1}{P(B)}P(A).
+\end{equation}
+Sabiendo que $P(B)\leq 1$, entonces llegamos a la conclusión de que
+\begin{equation}
+    P(A|B)\geq P(A).
+\end{equation}
+¡Esto implica que frente a la nueva evidencia, gracias al teorema de Bayes y la proposición $A\to B$, la verosimilitud de $B$ hace que $A$ sea más plausible! Cosa que la lógica a secas no nos alcanzaba.\par
+Entonces esta nueva forma de entender a la probabilidad nos sirve entender una clase muy cotidiana de sigilogismos que en la lógica estaban prohibidos, cambiando la inferencia tradicional por el teorema de Bayes.
+\section{Resumen de la teoría de probabilidad}
+Con el objetivo de manejar un lenguaje común sobre la teoría de probabilidad y aprovechando a repasar a continuación se dejan las definiciones típicas asociadas al estudio de la probabilidad. La motivación la dejo en mano de cursos anteriores.
+\begin{definition}
+    Dado un espacio de probabilidad $(\mathbb{X},\Omega,P)$, decimos que dos eventos $A,B\in \Omega$ son {\bf independientes} si
+    \begin{equation}
+        P(A,B) = P(A)P(B).
+    \end{equation}
+\end{definition}
+\subsection{Variables aleatorias unidimensionales}
+\begin{definition}
+    Dado un espacio de probabilidad $(\mathbb{X},\Omega,P)$, una {\bf variable aleatoria} o {\bf RV} -Random Variable- es una función $X:\mathbb{X}\to \mathbb{R}$.
+\end{definition}
+Cuando la variable aleatoria sea númerica, vamos a hablar indistintante del espacio muestreal y de sus valores posibles. El objetivo de la variable aleatoria es traducir los resultados de un experimento a un conjunto ordenado. Además también nos va a permitir acceder a eventos de forma más directa.
+\begin{definition}
+    Dada una variable aleatoria $X$ y una proposición $Q(x)$ que depende del número real $x$ -también podríamos pensarla en una función $Q:\mathbb{R}\to \{0,1\}$- definimos el evento
+    $$
+        Q(X) = \{x\in\mathbb{R}| Q(x) \}
+    $$
+\end{definition}
+\begin{definition}
+    Dada una variable aleatoria $X$ con distribución $P$, definimos la {\bf distribución acumulada} o {\bf CDF} -Cumulative distribution function- como la función $F:\mathbb{R}\to \mathbb{R}$ según
+    \begin{equation}
+        F(x) = P(X\leq x)
+    \end{equation}
+\end{definition}
+\subsubsection{Variables aleatorias discretas y continuas}
+Hasta ahora nada de lo que realizamos nos impidió tratar a variables aleatorias discretas y continuas en pie de igualdad. Sin embargo, el cálulo de valores medios ya nos obliga a hacer cierta discriminación.\par
+Dada una variable aleatoria $X$, si su CDF es una función continua de $F$, entonces estamos en presencia de lo que se denomina una variable aleatoria continua. En cambio, si la CDF a la variable aleatoria se la denomina discreta.
+\begin{definition}
+    Sea $X$ una variable aleatoria continua. Se define la {\bf densidad de probabilidad} o {\bf PDF} -Probability Density Function- de $X$ como la función $f:\mathbb{R}\to \mathbb{R}$ que satisface
+    \begin{equation}
+        F(x) = \int_{-\infty}^xf(x)\,dx.
+    \end{equation}
+\end{definition}
+Es claro que en los $x\in \mathbb{R}$ donde $F$ sea derivable se satisface
+\begin{equation}
+    F'(x) = f(x)
+\end{equation}
+en virtud del teorema fundamental del cálculo. Además, típicamente se suele definir a una variable aleatoria continua a partir de su PDF y no de su CFD.
+\subsubsection{Valores medios y momentos}
+\begin{definition}
+    Dada una variable aleatoria $X$, con distribución $P$ si es discreta (izquierda) y $f$ si es continua (derecha) se definen:
+    \begin{itemize}
+        \item Dada una función $h:\mathbb{X}\to \mathbb{R}$, se define el valor medio de $h$ como
+        \begin{equation}
+\langle h(X) \rangle = \sum_{i} h(x_i) p(x_i)
+\qquad \qquad 
+\langle h(X) \rangle = \int_{-\infty}^{\infty} h(x) f(x) \, dx
+        \end{equation}
+        \item Valores medios descatables son
+        \begin{itemize}
+            \item El valor medio de $X$, $h(x)=x$,
+            \begin{equation}
+                \mu = \sum_{i} x_i p(x_i)
+                \qquad \qquad 
+                \mu = \int_{-\infty}^{\infty} x f(x) \, dx;
+            \end{equation}
+            \item Su varianza, $h(x)=(x-\mu)^2$,
+            \begin{equation}
+                \sigma^2 = \sum_{i} (x_i-\mu)^2 p(x_i)
+                \qquad \qquad 
+                \sigma^2 = \int_{-\infty}^{\infty} (x-\mu)^2 f(x) \, dx;
+            \end{equation}
+            \item El momento de orden $n$ centrado en $x_0$, $h(x) = (x-x_0)^n$,
+            \begin{equation}
+                m_n(x_0) = \sum_{i} (x_i-x_0)^n p(x_i)
+                \qquad \qquad 
+                m_n(x_0) = \int_{-\infty}^{\infty} (x-x_0)^n f(x) \, dx;
+            \end{equation}
+        \end{itemize}
+    \end{itemize}
+\end{definition}
+La gracia de obtener los momentos de una distribución de probabilidad es que después los podemos usar para calcularel valor medio de cualquier función analítica,
+\begin{equation}
+    \langle h(X)\rangle =
+    \int h(x) p(x) dx = \int \sum_n \frac{1}{n!}\frac{d^nh}{dx^n}(x_0)(x-x_0)^n p(x)dx 
+\end{equation}
+\begin{equation}
+    \langle h(X)\rangle =\sum_n\frac{1}{n!}\frac{d^nh}{dx^n}(x_0)m_n(x_0).
+\end{equation}
+Una buena idea sería elegir $x_0$ de forma tal que los $m_n$ sean lo más chicos posibles y así poder despreciar términos de mayor orden en la sumatoria.

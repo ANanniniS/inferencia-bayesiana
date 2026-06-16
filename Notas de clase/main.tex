@@ -1,0 +1,54 @@
+\documentclass{book}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amssymb, amsmath} %Paquetes matemáticos de la American Mathematical Society
+\usepackage{appendix}
+
+%\theoremstyle{definition}
+\newtheorem{definition}{Definición}
+\newtheorem{theorem}{Teorema}
+\newtheorem{proof}{Demostraci\'on}
+
+%bibliografia
+%\usepackage[style=numeric,sorting=none]{biblatex}
+\usepackage[style=numeric,sorting=none,maxcitenames=2,backend=biber]{biblatex}
+\addbibresource{libreria.bib}
+
+%comandos personalizados
+\newcommand{\QED}{\begin{flushright} {\it QED} \end{flushright}}
+
+%distribuciones
+\newcommand{\GEO}{\text{Geo}}
+\newcommand{\Poi}{\text{Poi}}
+
+\usepackage{graphicx} % Required for inserting images
+\usepackage{vmargin}
+\setpapersize{A5}
+\setmargins{2cm}{1.5cm}{11cm}{17cm}{0cm}{1cm}{0.3cm}{1cm}      
+                        % margen izquierdo
+                        % margen superior
+                        % anchura del texto
+                        % altura del texto
+                        % altura de los encabezados
+                        % espacio entre el texto y los encabezados
+                        % altura del pie de página
+                        % espacio entre el texto y el pie de página
+
+
+\title{Inferencia Bayesiana}
+\author{Lic. Albano Nannini}
+
+\begin{document}
+
+\maketitle
+\input{Clase_1/clase1}
+\input{Clase_2/clase2}
+\input{Clase_3/clase3}
+\input{Clase_4/clase4}
+
+\input{Catalogo/distribuciones}
+
+\appendix
+\input{AP/metric}
+
+\printbibliography
+\end{document}

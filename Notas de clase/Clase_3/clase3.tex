@@ -1,0 +1,201 @@
+
+\chapter{Introducci\'on a Teor\'ia de Informaci\'on}
+En 1948 Shannon publica un trabajo llamado ``A mathematical theory of communication''. En este Shannon intenta resolver un problema fundamental de las comunicaciones: 
+\begin{center}
+    {\it
+        Para reducir la probabilidad de error al enviar un mensaje lo m\'as simple es repetirlo y de repetirlo infinitas veces el error tiende a 0 ¿Es posible hacer algo mejor que esto?
+    }
+\end{center}
+En este trabajo Shannon demuestra que de hecho esta es una manera absolutamente ineficiente de transmitir mensajes con probabilidad de error 0. Ese logro lo motiva a publicar un libro el año siguiente junto a Warren Weaver con el nombre de ``The mathematical theory of communication''. Es decir, asciende su obra de decir que es una teor\'ia a decir que es {\it la teor\'ia} de la comunicaci\'on.
+
+Evidentemente el problema de la comunicaci\'on no es el inter\'es de estas notas. Sin embargo lo que es incre\'ible es como esta teor\'ia resulto de gran utilidad en muy diversas \'areas: inform\'atica, inferencia estad\'istica (que si nos interesa), f\'isica, neurociencias, m\'usica, biolog\'ia, finanzas, etc. Es realmente poco razonable lo \'util que result\'o esta teor\'ia sujeto a que naci\'o de resolver un problema de ingenier\'ia muy concreto. Nosotros nos vamos a centrar en las aplicaciones de esta a probabilidad, inferencia estad\'istica y a Machine Learning.
+
+Si bien la teor\'ia de informaci\'on est\'a desarrollada tanto en variable aleatorias discretas como continuas -y con formulas muy similares- hay diferencias conceptuales que hacen que se tengan que estudiar teoricamente de forma muy difente. Estas diferencias no son superfluas y tienen consecuencias muy relevantes. De hecho, se suele decir que la definici\'on para variables aleatorias continuas ``no funciona tan bien'', lo que motiv\'o que hayan aparecido muchas alternativas a esta.
+\section{La entrop\'ia de Shannon}
+Las definiciones se pueden motivar de muchas formas. Yo en particular voy a motivarla de la misma forma que lo hizo Shannon que consiste en motivar que pretendemos de m\'etrica que diga cuanta informaci\'on brinda medir una variable aleatoria y luego obtener una formula resultante en funci\'on de las probabilidades.
+
+{\bf Repasar Shannon}
+
+\begin{definition}
+    Dada una variable aleatoria $X$ que toma valores en el alfabeto $\mathcal{A}= \{a_1,...,a_n\}$ con probabilidades $p(a_i) = p_i$. Se define su {\bf entrop\'ia} como 
+    \begin{equation}
+        H(X) = -\sum_i p_i \log_a p_i,
+    \end{equation}
+    donde $a$ es un real mayor a 1. La elecci\'on m\'as t\'ipica es $a=2$, y en este caso la unidad con la que se mide la entrop\'ia es el {\bf bit}.
+\end{definition}
+Una aclaraci\'on importante es que la entrop\'ia no es una funci\'on de los resultados posibles, es una funci\'on de la distribuci\'on de probabilidad entera. Pero tambi\'en es com\'un encontrar la siguiente definici\'on
+\begin{definition}
+    Dada una variable aleatoria $X$ que toma valores en el alfabeto $\mathcal{A}= \{a_1,...,a_n\}$ con probabilidades $p(a_i) = p_i$. La {\bf informaci\'on de $a_i$} est\'a dada por
+    \begin{equation}
+        H(a_i) = -\log_a p_i.
+    \end{equation}
+\end{definition}
+Que basicamente es la cantidad de preguntas bien elegidas que necesitamos para determinar $X$ cuando el resultado es $a_i$. Adem\'as con esta definici\'on, la entrop\'ia se reduce al valor medio de la informaci\'on que obtenemos de medir la variable aleatoria.\par
+Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el n\'umero medio de preguntas -bien elegidas-  que necesitamos para determinar univocamente el valor de la variable aleatoria. Se puede demostrar matem\'aticamente que si todas probabilidades son potencias enteras de $1/2$, entonces si elegimos bien las preguntas binarias la media de preguntas que necesitemos va a coincider con la entrop\'ia y si no podemos, entonces la media de preguntas que vamos a necesitar est\'a acotado superiormente por la entrop\'ia m\'as 1.
+\begin{theorem}
+    Dada $X$  una variable aleatoria que toma valores en $\{a_1,...,a_n\}$ con distribuci\'on $p_1,...,p_n$. Siempre vale que
+    \begin{enumerate}
+        \item No negativa,
+        \begin{equation}
+            H(X)\geq 0
+        \end{equation}
+        \item La entrop\'ia se anula si y solo si $X$ es determinista
+        \item La entrop\'ia est\'a acotada por el logaritmo de la cantidad de elementos,
+        \begin{equation}
+            H(X)\leq \log n
+        \end{equation}
+        y esta cota m\'axima se alcanza si y solo si la distribuci\'on de probabilidad es uniforme.
+    \end{enumerate}
+\end{theorem}
+Como no en ninguna parte de la expresiones de todo lo que desarrollamos hasta ahora aparecen los valores que toma la variable aleatoria la entrop\'ia y sus definiciones auxiliares generalmente no dependen de estos.
+
+
+La teor\'ia necesita tambi\'en definiciones asociadas a cuando hay m\'as de una variable aleatoria en juego.
+\begin{definition}
+    Dadas dos variables aleatorias $X$ y $Y$ que toman valores $\{x_1,...,x_n\}$ y $\{y_1,...,y_m\}$ respectivamente. Se define su {\bf entrop\'ia conjunta} como la cantidad
+    \begin{equation}
+        H(X,Y) = -\sum_{i,j}^{n,m}p(x_i,y_j)\log p(x_i,x_j).
+    \end{equation}
+    Se definen las {\bf entrop\'ias condicionales} como las cantidades
+    \begin{equation}
+        H(Y|X) = -\sum_ip(x_i)\sum_jp(y_j|x_i)\log p(y_j|x_i).
+    \end{equation}
+\end{definition}
+En escencia, la entrop\'ia conjunta se puede interpretar como la cantidad de preguntas necesarias para determinar simultaneamente los valores que toman $X$ e $Y$.
+
+Cuando determinamos el valor de $X$, debemos actualizar la distribuci\'on de probabilidad sobre $Y$ -usando la probabilidad condicional-, lo que modifica sus probabilidad. Entonces para cada resultado de $X$ vamos a tener una entrop\'ia de $Y$ diferente, luego, la media de entrop\'ia de $Y$ por haber determinado primero $X$ es exactamente su entrop\'ia condicional.
+
+\begin{theorem}
+    Dadas $X$ e $Y$ variables aleatorias. Se puede demostrar que 
+    \begin{enumerate}
+        \item Regla de la cadena:
+        \begin{equation}
+            H(X,Y) = H(X) + H(Y|X)
+        \end{equation}
+        \item Condici\'on de independencia: La independencia probal\'istica de $X$ e $Y$ es equivalente a cualquiera de las siguientes ecuaciones
+        \begin{equation}
+            H(X|Y) = H(X)\qquad H(Y|X) = H(Y)
+        \end{equation}
+        y
+        \begin{equation}
+            H(X,Y) = H(X)+H(Y)
+        \end{equation}
+    \end{enumerate}
+\end{theorem}
+Ambas propiedades tienen interpretaciones muy interesantes. En primer lugar, la ecuaci\'on de la regla de la cadena lo que nos dice es que la cantidad de preguntas necesarias para determinar $X$ e $Y$ es la cantidad de preguntas que necesitamos para determinar $X$ m\'as la cantidad de preguntas que necesitamos para determinar $Y$ sabiendo ya $X$. 
+Y lo que nos dice la condici\'on de independencia es que saber $Y$ no nos ahorra ninguna pregunta sobre $X$ si son independientes. Y adem\'as la informaci\'on para determinar $X$ e $Y$ en ese caso es la misma que necesitariamos para determinar $X$ e $Y$ por separado.
+
+
+
+\section{La divergencia KL y la informaci\'on mutua}
+\subsection{La divergencia KL}
+Supongamos que queremos determinar el valor de una variable aleatoria $X$. Nosotros creemos que la distribuci\'on que sigue es $p_i$. Por lo tanto armamos nuestro arbol de probabilidades para que determinar $a_i$ nos cueste $H(a_i)=-\log p_i$ preguntas. Sin embargo, el proceso que genera la variable aleatoria tiene una distribuci\'on de probabilidad $q_i$. Entonces si calculamos cuantas preguntas desperdiciamos por haber confundido la distribuci\'on de probabilidad la cuenta es la siguiente,
+\begin{equation}
+    \left\langle \text{Preguntas desperdiciadas}\right\rangle = 
+    \left\langle \text{Preguntas hechas}\right\rangle
+    -
+    \left\langle \text{Preguntas necesarias}\right\rangle.
+\end{equation}
+Y esto motiva la siguiente definici\'on
+\begin{definition}
+    Se define la divergencia de Kullback-Leibler como la cantidad,
+    \begin{equation}
+        D_{KL}(p||q)-\sum p_i \log q_i + \sum p_i\log p_i =  \sum p_i\log\frac{p_i}{q_i}.
+    \end{equation}
+\end{definition}
+\begin{theorem}
+    Dadas $p_i$ y $q_i$ distribuciones sobre el mismo alfabeto. Esta cantidad siempre es no negativa
+        \begin{equation}
+            D_{KL}(p||q) \geq 0
+        \end{equation}
+    y se anula si y solo si $p_i=q_i$.
+\end{theorem}
+Es muy importante notar que a pesar que es una cantidad muy buena para realizar comparaciones entre distribuciones, esta no es una {\it m\'etrica} en el espacio de estas ya que no satisface la conmutabilidad entre $p_i$ y $q_i$ ni la desigualdad triangular.
+\subsection{La informaci\'on mutua}
+Otra cantidad profundamente relevante es la que proviene de preguntarnos cu\'antas preguntas sobre $X$ nos ahorramos por saber $Y$.
+\begin{definition}
+    Dadas dos variables aleatorias $X$ e $Y$ se define su {\bf informaci\'on mutua} $I(X;Y)$ como
+    \begin{equation}
+        I(X;Y) = H(Y) -H(Y|X).
+    \end{equation}
+\end{definition}
+\begin{theorem}
+    La informaci\'on mutua es conmutativa y dadas variables aleatorias $X$ e $Y$ satisface
+    \begin{equation}
+        I(X;Y) = H(Y) - H(Y|X) = H(X) - H(X|Y)
+    \end{equation}
+    \begin{equation}
+        I(X;Y) = H(X)+H(Y) - H(X;Y) = D_{KL}(p(x,y)||p(x) p(y))
+    \end{equation}
+\end{theorem}
+Este \'ultimo teorema nos indica dos cosas:
+\begin{enumerate}
+    \item Las preguntas que nos ahorramos de $X$ por saber $Y$ son las mismas que nos ahorramos de $Y$ por saber $X$.
+    \item La informaci\'on mutua entre dos variables aleatorias es la misma que la cantidad de preguntas que desperdiciariamos por suponer independientes a las variables aleatorias.
+\end{enumerate}
+Y nuevamente, realizamos una definici\'on para el caso condicionado
+\begin{definition}
+    Dadas variables aleatorias $X, Y, Z$, definimos la {\bf informaci\'on mutua condicionada} $I(X,Y|Z)$ como
+    \begin{equation}
+        H(X;Y|Z) = H(X|Z) + H(Y|Z) -H(X,Y|Z).
+    \end{equation}
+\end{definition}
+\begin{theorem}
+    Algunas propiedades asociadas a la informaci\'on mutua son
+    \begin{enumerate}
+        \item
+        \begin{equation}
+            I(X,X) = H(X)
+        \end{equation}
+        \item Conmutatividad,
+        \item No negatividad,
+        \begin{equation}
+            I(X,Y) \geq 0
+        \end{equation}
+        con la igualdad valiendo si y solo si las variables son independientes.
+        \item Acotada superiormente,
+        \begin{equation}
+            I(X,Y) \leq \min (H(X),H(Y))
+        \end{equation}
+    \end{enumerate}
+\end{theorem}
+\section{La desigualdad del procesamiento de datos}
+Una de las conclusiones m\'as relevantes sobre teor\'ia de informaci\'on es la llamada desigualdad del procesamiento de datos. B\'asicamente consiste en pensas un sistema muy sencillo: Tenemos una variable aleatoria $X$ de la cual queremos saber el resultado pero no la vemos directamente. Sino, que la medimos con alg\'un instrumento cuyo resultado es la variable aleatoria $Y$ de la cual sabemos las probabilidades $p(y|x)$. Puede ser que la variable $X$ tenga un valor e $Y$ la intenta leer pero sometida a cierto ruido por ejemplo. Entonces la informaci\'on que obtenemos sobre $X$ con estas mediciones es cuanto se reduce la entrop\'ia de $X$ al saber $Y$. Esto se cuantifica como la informaci\'on mutua entre $X$ e $Y$.
+
+Puede surgir la pregunta de si podemos hacer alg\'un analisis de datos de $Y$ para mejorar esta informaci\'on mutua. Llamamos $Z$ al resultado de analisis de datos, que puede ser tanto determinista como probabil\'istico. Como es un analisis de datos tenemos la estructura condicional $p(z|y)$. Pero es muy importante considerar que nuestro an\'alisis de datos solo puede ``ver'' a la variable aleatoria $Y$, nunca a la $X$ directamente. Esto se codifica matem\'aticamente con la siguiente ecuaci\'on
+\begin{equation}
+    p(z|x,y) = p(z|y).
+    \label{3:eq:ind}
+\end{equation}
+Es decir, si sabemos el valor de $y$, no puede impactar en el an\'alisis de datos el valor real de $x$. Esto no quiere decir que $z$ sea independiente de $x$. De hecho, el valor de $X$ induce una probabilidad en la distribuci\'on de los $Y$ que induce una diferente en la de los $Z$. Pero una vez tenemos el valor de $Y$ resultante, como $Z$ solo mira el valor de esta y no el de $X$, no puede haber una dependencia con este \'ultimo en lo que respecta a nuestro an\'alisis. Este estilo de estructura se conoce como independencia condicional.
+
+Entonces la pregunta ser\'ia
+\begin{center}
+    {\it ¿Es mayor la informaci\'on mutua entre $X$ y $Z$ que la de $X$ e $Y$?}
+\end{center}
+Para responderla planteamos la siguiente informaci\'on mutua:
+\begin{equation}
+    I(X;Y,Z) = I(X;Y) + I(X;Z|Y) = I(X;Z) + I(X;Y|Z) 
+\end{equation}
+Aplicando la ecuaci\'on (\ref{3:eq:ind}) vemos que $I(X;Z|Y)=0$. Y como $I(X;Y|Z)$ es siempre mayor o igual a 0, debe darse que
+\begin{equation}
+    I(X;Y) \geq I(X;Z).
+\end{equation}
+Esta desigualdad nos dice algo fundamental sobre el an\'alisis de datos:
+\begin{center}
+    {\it
+    No podemos ganar informaci\'on sobre lo que estamos midiendo solo analizando datos.
+    }
+\end{center}
+Es f\'acil reaccionar a la defensiva frente a esta desigualdad y preguntarse para qu\'e analizar los datos entonces. Y es que lo importante de entender es que, que haya m\'as informaci\'on no implica que esta sea f\'acil de entender o que habilite el proceso de inferencia con mayor facilidad. Y es precisamente esto lo que hacemos los datos que analizamos, los transformamos hasta que nosostros -o una computadora- podamos entenderlos facilmente pero bajo ning\'un concepto estamos haciendo aparecer informaci\'on nueva. De hecho, en el mejor de los casos, no perdemos informaci\'on.
+
+Los an\'alisis o transformaciones donde no perdemos informaci\'on son muy relevantes. Y son de particular inter\'es aquellos donde la entrop\'ia de la variable final es menor por tener menos elementos sin perder informaci\'on sobre la primer variable.
+\begin{definition}
+    Sean dos variables aleatorias $X$ e $Y$ definimos una tercera $Z=f(Z)$, es decir, $Z$ es un an\'alisis de datos determinista de $Y$. Decimos que el mapeo $f$ constituye una estad\'istica suficiente si
+    \begin{equation}
+        I(X,Y) = I(X,Z).
+    \end{equation}
+\end{definition}
+\section{Teor\'ia de informaci\'on para distribuciones continuas}
+\section{La informaci\'on de Fisher}
+\section{Max Entropy}

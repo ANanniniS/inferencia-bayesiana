@@ -1,0 +1,195 @@
+
+\chapter{Elementos Básicos de la Inferencia Bayesiana}
+En contraposición al delirio filosófico y algebraíco del capítulo anterior arrancamos este con un ejemplo mucho más práctico. Desgraciadamente recién para el final del capítulo lo vamos a poder terminar de resolver. Nos encontramos una moneda en la calle y queremos determinar la probabilidad de que al arrojarla obtengamos una cara.\par
+Ignorando la posibilidad de que caiga de canto, los resultados posibles de arrojarla son seca o cara o, para mayor simplicidad en las cuentas, $\mathbb{X}=\{0, 1\}$. Por lo tanto, podemos modelar la distribución de probabilidad de los resultados como
+\begin{equation}
+    P(x|\mu)=
+    \left\{
+    \begin{array}{lr}
+        1-\mu & x=0 \\
+        \mu & x=1
+    \end{array}
+    \right.
+    \label{2:eq:bern}
+\end{equation}
+donde $\mu$ es el parámetro de la distribución.
+
+Descripto de esta forma, el problema ahora es intentar inferir el valor de $\mu$ que de mínima está entre 0 y 1. En principio, lo que nos interesaría sería hacer varias realizaciones del experimento y con ellas realizar la inferencia. Supongamos que tiramos la moneda $N$ veces y los resultados los vamos guardamos en un vector
+\begin{equation}
+    \mathbf{x} = (x_1,...,x_n).
+\end{equation}
+Ahora, asumiendo independencia entre las tiradas, lo que podemos calcular con la ecuación (\ref{2:eq:bern}) es $P(\mathbf{x}|\mu)$ cuando lo que realmente nos interesa es $P(\mu|\mathbf{x})$, es decir, nuestras expectativas de $\mu$ actualilzadas a las mediciones que realizamos. Utilizando el teorema de Bayes,
+\begin{equation}
+    P(\mu|\mathbf{x})
+    =
+    \frac{P(\mathbf{x}|\mu)}{P(\mathbf{x})}P(\mu).
+\end{equation}
+La dependencia de esta nueva distribución de probabilidad con $P(\mu)$ es bastante molesta porque requiere tener formalizada una expectativa de $\mu$ en ausencia de mediciones. Algunas decisiones posibles serian:
+\begin{itemize}
+    \item Agarrar algún estudio de alguien que se haya molestado en hacer un histograma con un millón de monedas. Luego, con un criterio frecuentista, argumentar que nuestras expectivas sobre el parámetro que caracteriza nuestra moneda coincide con la de las monedas usada en el estudio. La gran ventaja de este método es que la distribución de probabilidad $\mu$ estaría muy bien argumentada. Su gran problema es que tenemos que encontrar a alguien que se haya molestado en resolver el problema antes que nosotros, lo que no siempre sucede.
+    \item Fijar a dedo una distribución de probabilidad para $P(\mu)$ en base a nuestras expectativas. Esto cae obviamente en una interpretación bayesiana de la probabilidad. De elegir esta opción, sería conveniente tomar una función con la que sea fácil realizar manipulaciones algebráicas.
+    \item Decir $P(\mu)$ es uniforme entre 0 y 1. Por supuesto, esta elección es únicamente un caso particular de la previamente mencionada, pero separado por ser una elección {\bf muy} típica. La gran ventaja de esta asumción es que las cuentas se simplifican mucho y no le damos más probabilidad a ningún parámetro sobre otro. La principal desventaja se encontraría en que estaríamos diciendo que tenemos la misma expectativa de encontrar al parámetro en el intervalo $[0,0.1]$ que en el $[0.45,0.55]$ lo que nuestra experiencia dice que es absurdo.
+\end{itemize}
+Elijamos lo que elijamos, siempre vamos a tener que hacer una suposición y esa es una lección fundamental de la inferencia bayesiana
+\begin{center}
+    {\it
+    Para hacer inferencia siempre vamos a tener que hacer suposiciones. El marco bayeasino puede enmarcar como actualizar nuestras creencias pero para actualizar algo es encesario que exista desde un principio.
+    }
+\end{center}
+\section{Inferencia de parámetros}
+Supongamos que tenemos cierto experimento con resultados $x\in \mathbb{X}$. Sabemos que la distribución de probabilidad de $x$ tiene cierta forma que es dependiente de parámetros que no conocemos. A estos parámetros desconocidos los llamamos $\theta$. Al conjunto de posibles parámetros los llamamos $\Theta$. Es decir, tenemos conocimiento de las funciones
+\begin{equation}
+    P(\mathbf{x}|\theta)
+\end{equation}
+con $\theta \in \Theta$. Nuevamente, la idea es determinar los valores $\theta$ de los parámetros mediante realizaciones del experimento. De realizar el experimento $N$ veces guardamos el vector $\mathbf{x} = \{x_1,...,x_N\}$.
+
+\subsection{Términos del teorema de Bayes}
+Mediante el uso del teorema de Bayes nomenclamos las siguientes cantidades
+\begin{equation}
+    \overbrace{P(\theta|\mathbf{x})}^{\text{Posteriori}} = \frac{\overbrace{P(\mathbf{x}|\theta)}^{\text{Verosimilitud}}}{\underbrace{P(\mathbf{x})}_{\text{Evidencia}}} \overbrace{P(\theta)}^{\text{Priori}}.
+\end{equation}
+Esta terminología nace de que practicamente en todo problema de inferencia cada término tiene el mismo rol.
+\begin{itemize}
+    \item La distribución a priori -o prior- $P(\theta)$: cuantifica nuestro grado de creencia sobre que el parámetro real es $\theta$ desde antes de realizar las mediciones. El problema que detallamos anteriormente sobre elegir una priori no es algo que al día de hoy tenga una solución concreta y muchos trabajos científicos enteros se basan en su justificación. Como se comentó previamente, estas dificultades se traducen luego a una elección de priori uniforme, ya que al menos es fácil de manipular algebráicamente.
+    \item La verosimilitud -o likelyhood- $P(\mathbf{x}|\theta)$: cuantifica que tan posible vemos la realización obtenida del experimento sujeta a las mediciones realizadas. 
+    \item La posteriori -o posterior- $P(\theta|\mathbf{x})$: cuantifica el grado de creencia sobre los valores de $\theta$ actualizadas por las mediciones realizadas.
+    \item La evidencia -o evidence- $P(\mathbf{x})$: nombrada así por ser la probabilidad de aquello que entendemos por la evidencia a favor de una determinación de parámetros sobre otra. En el proceso de inferencia es la parte que menos ``arte'' tiene, pues se puede calcular utilizando la normalización de la posteriori. Además, es importante notar que este término es independiente del parámetro que se busca determinar.
+\end{itemize}
+\subsection{La naturaleza del espacio donde viven\\ los parámetros}
+Hasta ahora no aclaramos que si los parámetros $\theta$ son discretos o continuos. Tampoco aclaramos si tienen una o varias dimensiones. La razón de esto es que la argumentación para estos tópicos no requiere separar por casos. Sin embargo es útil tener una noción de la naturaleza que podrían tener estos espacios. Algunos ejemplos de la forma que tienen estos espacios pueden ser:
+\begin{itemize}
+    \item Si la distribución que sigue $x$ es de Bernoulli -como la moneda-, entonces su único parámetro es $\mu$, lo que hace que el espacio $\Theta$ sea el segmento $[0,1]$
+    \item Si la distribución que sigue que $x$ es una binomial -como la cantidad de veces que obtiene cara luego de tirar una moneda una cantidad fija de veces- los parámetros son $n$ y $p$ siendo la cantidad de veces que se repite el experimento y la probabilidad de exito de cada uno de ellos. Entonces podemos pensar a $\Theta$ como 10 segmentos $[0,1]$ desconectados, esto es
+    \begin{equation}
+        \Theta = [0,1]\times \mathbb{N} = \{ (p,n)|p\in[0,1],n\in\mathbb{N}\}.
+    \end{equation}
+    Pero esto es solo si queremos determinar $n$ y $p$ simultaneamente. De hecho, más típico es conocer el valor de $n$ e intentar determinar el de $p$. En cuyo caso la naturaleza del espacio de parámetros se reduce a la misma que la de un evento de Bernoulli.
+    \item Si la variable aleatoria $X$ toma valores en una gaussiana sus parámetros deben ser la media y la desviación estandar.
+    \begin{itemize}
+        \item Si sabemos la desviación estandar y queremos averiguar la media, el espacio de parámetros sería la recta real,
+        \begin{equation}
+            \Theta = \mathbb{R}
+        \end{equation}
+        \item Si sabemos la media y queremos averiguar la desviación estandar, el espacio de parámetros sería la semirecta positiva de los reales,
+        \begin{equation}
+            \Theta = \mathbb{R}^+
+        \end{equation}
+        \item Y si quisieramos determinar ambas simultaneamente,
+        \begin{equation}
+            \Theta = \mathbb{R}\times \mathbb{R}^+
+        \end{equation}
+    \end{itemize}
+    \item Una distribución mucho menos común es la de Von Mises, en esta, los valores que toma $x$ son ángulos de un circulo\footnote{Esta distribución representa como sería una gaussiana pero para puntos de un círculo}. Es decir $x\in [0,2\pi]$ y su distribución de probabilidad es
+    \begin{equation}
+        P(x|\phi,\kappa) = \frac{1}{2\pi I_0(\kappa)}\exp( \kappa \cos (x-\mu)).
+    \end{equation}
+    Supongamos que ya sabemos el valor de $\kappa$ -que representa algo así como la desviación estandar adaptada a un círculo- y queremos averguar el valor de $\mu$ -que representa la media también adaptada a esta trayectoria. Podríamos tentarnos y decir que $\Theta = [0,2\pi]$ ya que son los valores posibles de $\mu$ y respecto a eso tendríamos razón. El problema es que perderíamos de vista algo muy importante desde el punto de vista de la inferencia. Esto que perderíamos de vista sería la facilidad que tendríamos para distinguir valores de $\theta$ con mediciones. Como los $\mu$ representan ángulos, entonces $\mu=1.99\pi$ es mucho más parecido a $\mu = 0$ de que lo es $\mu = \pi$ aunque en el segmento de recta este último esté más cercano. Entonces sería más conveniente decir que la naturaleza -o topología- de $\mu$ es la de un círculo y no la de un segmento de recta.
+\end{itemize}
+
+Básicamente, a lo que me vengo refiriendo como ``naturaleza de los espacios'' es la noción de similitud o continuidad que tienen los parámetros. El área matemática en la que se entudian estas nociones de continuidad se llama topología y es de mucha utilidad para imaginar el lugar donde estamos haciendo inferencia.
+
+Aunque por sí sola, la teoría abstracta de topología no es muy útil para estos fines. Estos es porque se puede hablar de topología sin una noción de distancia. Si podemos complementar la topología de un espacio de parámetros con una noción de distancia entonces la podemos estudiar con otra teoría matemática llamada geometría diferencial rimmaniana\footnote{Que es la teoría matemática detrás de la relatividad general}. Esta teoría tiene un lugar muy partícular en aplicaciones avanzadas de Machine Learning y puede usarse con cierta facilidad para hacer {\it feature engineering} también en contextos de aprendizaje automático.
+
+\section{Distribuciones conjugadas}
+
+Como dijimos anteriormente una típica elección de priori es la uniforme por su facilidad en la manipulación algebráica. Esta elección puede ser problemática porque hay veces que eso implica que la distribución $P(\theta)$ no sea normalizable, Esto lo podemos solucionar de dos formas. La primera es anular la distribución de probabilidad sobre valores que consideremos extremos según el contexto. La segunda es decir: {\it ``Bueno, igual esta distribución solo era mi grado de creencias sobre $\theta$, no la necesito normalizada ya que no se puede repetir el experimento y evaluarla con un criterio frecuentista''}.
+
+En este contexto y bajo estas suposiciones el cálculo de la posteriori se reduce a 
+\begin{equation}
+    P(\theta|\mathbf{x}) = \frac{1}{Z(\mathbf{x})} P(\mathbf{x}|\theta)
+\end{equation}
+donde $Z(\mathbf{x})$ normaliza a la distribución de probabilidad. Nuevamente, esta situación es muy típica en contextos de inferencia, lo que motiva la siguiente definición.
+\begin{definition}
+    Si $P(\cdot|\theta)$ es una distribución de probabilidad que depende de los parámetros $\theta\in\Theta$ y toma valores en $\mathbb{X}$. Dado $\mathbf{x}\in \mathbb{X}^N$, se define la {\bf distribución conjugada} de $P$ como la distribución de probabilidad sobre $\Theta$
+    \begin{equation}
+        g(\theta|\mathbf{x}) = \frac{1}{Z(\mathbf{x})}P(\mathbf{x}|\theta),
+    \end{equation}
+    donde $Z(\mathbf{x})$ es la constante de normalización de la distribución.
+\end{definition}
+En escencia, la distribución conjugada es una distribución cuyos parámetros son los resultados de las mediciones y va a coincidir con la posteriori cuando la priori sea uniforme.
+\subsection{Ejemplos de distribuciones conjugadas}
+\subsubsection{Distribución de Bernoulli}
+Al fin, nos dedicamos a resolver el ejemplo de la moneda.
+Con el fin de hacer de determinar su parámetros hacemos un muestreo de $N$ variables Bernoulli, $X_i\sim \text{Bern}(p)$. Guardamos los resultados en $\mathbf{x}=(x_1,...,x_N)$. La distribución conjugada es entonces
+\begin{equation}
+    g(p|\mathbf{x}) = \frac{1}{Z(\mathbf{x})}\text{Bern}(\mathbf{x}|p) = \frac{1}{Z(\mathbf{x})}p^{n}(1-p)^{N-n},
+\end{equation}
+donde $n = \sum x_i$.
+
+Aunque nos falte la constante de normalización $Z$ nada nos impediría pensar por ejemplo en los estimadores MAP -si tenemos una priori- o ML -si no. En ese sentido, esta constante de normalización no nos aportaría nada más que lograr una distribución de prababilidad que sea proporcional a la verosimilitud. Su cálculo está dado por
+\begin{equation}
+    Z(\mathbf{x}) = \int_0^1 p^{n}(1-p)^{N-n}dp,
+\end{equation}
+lo que lleva al resultado
+\begin{equation}
+    g(p|\mathbf{x}) = \binom{N}{n}p^n(1-p)^{N-n}
+\end{equation}
+Este es un caso particular de la llamada distribuci\'on Beta, dada por
+\begin{equation}
+    B(p|\alpha,\beta) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}p^{\alpha-1}(1-p)^{\beta-1}
+\end{equation}
+donde $p\in[0,1]$, los hiperpar\'ametros $\alpha,\beta\in\mathbb{R}^+$ y la funci\'on $\Gamma$\footnote{Esta funci\'on es muy conocida y se llama funci\'on Gamma. Es conocida por ser una generalizaci\'on de la funci\'on factorial a n\'umeros reales pues $x\in\mathbb{N}_0$ entonces $\Gamma(n+1) = n!$} est\'a dada por
+\begin{equation}
+    \Gamma(x) = \int_0^\infty t^{x-1}e^{-t}dt.
+\end{equation}
+\subsubsection{Distribución Gaussiana}
+La distribuci\'on normal depende de dos par\'ametros. Estos significa que vamos a tener una distribuci\'on conjugada diferente dependiendo cual de estos sepamos.
+
+Si conocemos la desviaci\'on est\'andar y desconocemos la media,
+\begin{equation}
+    g(\mu|\mathbf{x}) \propto \prod \exp\left( - \frac{(\mu-x_i)^2}{2\sigma^2}\right)\propto \exp \left(- \frac{(\mu-\overline{x})^2}{2\sigma^2} \right).
+\end{equation}
+De esta proporcionalidad se deduce que la conjugada -cuando conocemos la desviaci\'on est\'andar, de la distribuci\'on normal es tambi\'en una normal de la misma varianza.
+\subsection{Distribuci\'on Poissoniana}
+La distribuci\'on poissoniana es de la m\'as \'utiles en lo que se refiere al modelado probabil\'istico. Algunos ejemplos de sus aplicaciones pueden ser: la cantidad de compras en un d\'ia/semana/a\~no, la cantidad de clientes de un negocio, la cantidad de accidentes de transito, los picos de tensi\'on de una neurona y las manchas de un dalmata. Supongamos que queremos inferir el par\'ametro $\gamma$ de una distribuci\'on poissoniana,
+\begin{equation}
+    p(n|\lambda) = \frac{\lambda^n}{n!}e^{-\lambda}
+\end{equation}
+Por tanto buscamos la distribuci\'on que satisface
+\begin{equation}
+    g(\lambda|\mathbf{n}) \propto e^{ -N\lambda}\lambda^{n_1+...+n_N}.
+\end{equation}
+Calculando la constante de proporci\'on se obtiene una distribuci\'on Gamma,
+\begin{equation}
+    g(\lambda|\mathbf{n}) = \frac{N^{n+1}}{(n_1+...+n_N)!}e^{-N\lambda}\lambda^{n_1+...+n_N}
+\end{equation}
+\section{Actualizaci\'on secuencial: el posterior de hoy es la priori de mañana}
+Es cierto que la probabilidad condicional se define considerando dos eventos. Sin embargo, es la cosmovisi\'on bayesiana lo cierto es que siempre pretendemos actualizar todas nuestras expectativas frente a nueva evidencia, no solo la de un evento espec\'ifico.
+\begin{theorem}
+    Sea $(\mathbb{X},\Sigma,P)$ un espacio de probabilidad y $\Omega\in\Sigma/P(A)\neq 0$. Definimos una funci\'on $P_\Omega:\Sigma\to \mathbb{R}$ seg\'un
+    \begin{equation}
+        P_\Omega(\cdot) = P(\cdot|\Omega).
+    \end{equation}
+    Luego $(\mathbb{X},\Sigma,P_\Omega)$ es tambi\'en un espacio de probabilidad.
+\end{theorem}
+{\bf Demostraci\'on:} Como $\mathbb{X}$ es un conjunto y $\Sigma$ un espacio de eventos solo queda ver que $P_\Omega$ satisface los axiomas de Kolmogorov para comprobar que $(\mathbb{X},\Sigma,P_\Omega)$ es un espacio de probabilidad.
+\begin{itemize}
+    \item
+    $$
+        P_\Omega(\mathbb{X}) = \frac{P(\mathbb{X}\cap \Omega)}{P(\Omega)}=\frac{P(\Omega)}{P(\Omega)}=1.
+    $$
+    \item Dado $A\in \Sigma$, Luego $A\cap \Omega\in Sigma$. Como $P$ es una distribuci\'on de probabilidad tanto $P(\Omega)$ como $P(A\cap \Omega)$ son mayores a 0. Esto lleva a que su cociente tambi\'en lo sea,
+    $$
+        P_\Omega(A) = \frac{P(A\cap\Omega)}{P(\Omega)}\geq 0.
+    $$
+    \item Si tenemos una familia de eventos disjuntos $A_i$ con $i\in I$. Tambi\'en lo va a ser la familia de conjuntos $B_i = A_i\cap \Omega$. Por lo que, usando el tercer axioma de probabilidad de $P$.
+    $$
+        P_\Omega\left( \bigcup_{i\in I} A_i\right) = \frac{P\left(\bigcup_i B_i\right)}{P(\Omega)}= \frac{\sum_i P(B_i)}{P(\Omega)}=\sum_i P_\Omega(B_i)
+    $$
+\end{itemize}
+\QED
+Lo que significa este resultado es que luego de actualizar nuestras expectativas con las respectivas definiciones seguimos teniendo una funci\'on de expectativas consistentes algebr\'aicamente. O sea, podr\'iamos olvidarnos de la notaci\'on $P(\cdot|\Omega)$ cambiando la funci\'on $P$ entera y tendr\'iamos una funci\'on de probabilidad actualizada a nuestras creencias actuales. 
+
+Supongamos que queremos hacer inferencia de par\'ametros $\theta$ y para eso hacemos una tanda de mediciones con resultados $x_1,...,x_n$. De ello actualizamos nuestras creencias
+\begin{equation}
+    P_\mathbf{x}(\theta)=P(\theta|\mathbf{x}) = \frac{P(\mathbf{x}|\theta)P(\theta)}{P(\mathbf{x})}.
+\end{equation}
+Luego realizamos otras mediciones $y_1,...,y_m$. Ah\'i tenemos que actualizar nuestras creencias pero utilizando de priori la \'ultima probabilidad,
+\begin{equation}
+    P_\mathbf{x}(\theta|\mathbf{y}) = \frac{P_\mathbf{x}(\mathbf{y}|\theta)P_\mathbf{x}(\theta)}{P_\mathbf{x}(\mathbf{y})},
+\end{equation}
+Desarrollando esta expresi\'on obtenemos 
+\begin{equation}
+    P_\mathbf{x}(\theta|\mathbf{y}) = P(\theta|\mathbf{x,y}).
+\end{equation}
+Esto quiere decir que al actualizar nuestras creencias nuevamente podemos usar la primera priori y actualizar con todas las mediciones juntas. Como bien podr\'iamos actualizar la priori una segunda vez en virtud del teorema de Bayes. Esto justificar\'ia olvidarnos de las primeras mediciones y guardar su informaci\'on en una priori actualizada.

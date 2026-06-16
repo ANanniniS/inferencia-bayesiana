@@ -1,0 +1,140 @@
+\chapter{Distribuciones de probabilidad}
+\section{Distribuci\'on de Bernoulli. $X\sim \text{Bern}(p)$.}
+Modela si sucede o no cierto evento.
+\begin{equation}
+    \text{Bern}(x|p) = \left\{
+    \begin{array}{lr}
+        p & x=1 \\
+        1-p & x=0
+    \end{array}
+    \right.
+    =
+    p^x(1-p)^{1-x}
+\end{equation}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|} 
+\hline
+$\mathbb{X}$& Mean & Variance & Shannon Entropy & Fisher's Information  \\ 
+\hline
+\{0,1\}    &   $p$      &  $p(1-p)$  & $-p\log p -(1-p)\log(1-p) $  & $J(p)= \frac{1}{p(1-p)}$                  \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+
+\section{Distribuci\'on Binomial. $X\sim \text{Bin}(p,N)$.}
+Es la suma de $N$ variables de Bernoulli. Es fácil de entender como "la cantidad de éxitos" cuando un evento se intenta $N$ veces con probabilidad $p$.
+\begin{equation}
+    \text{Bin}(n|p) = \binom{N}{n}p^n(1-p)^{N-n}
+\end{equation}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|} 
+\hline
+$\mathbb{X}$& Mean & Variance \\ 
+\hline
+\{0,1,...,N\}    &   $Np$      &  $Np(1-p)$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Distribuci\'on Categ\'orica, $\mathbf{X}\sim \text{Cat}(\mathbf{p})$}
+Es una generalización de todas las variables aleatorias discretas finitas. Puede ser útil para modelar datos categóricos aunque contiene teóricamente al resto de distribuciones donde el orden si representa algo relevante. Es útil pensar que los eventos posibles son
+\begin{equation}
+    \mathbb{X} = \left\{
+    \mathbf{e}_1,...,\mathbf{e}_n
+    \right\}
+\end{equation}
+donde $\mathbf{e}_i$ es el $i-$\'esimo vector de la base can\'onica. Cada uno de ellos tiene una probabilidad disjunta,
+\begin{equation}
+    \text{Cat}(\mathbf{e}_i|\mathbf{p}) = p_i,
+\end{equation}
+donde los $p_i$ son los par\'ametros de la distribuci\'on, que deben satisfacer que su suma sea igual a 1. Esta distribuci\'on entendida as\'i sigue reglas similares a una distribuci\'on de Bernoulli
+\begin{equation}
+    \langle \mathbf{X}\rangle = 
+    \left[
+    \begin{array}{c}
+         p_1\\
+         p_2\\
+         \vdots\\
+         p_n\\
+    \end{array}
+    \right]=
+    \mathbf{p}.
+\end{equation}
+Su varianza est\'a dada por
+\begin{equation}
+    \langle (\mathbf{X-\langle\mathbf{X}\rangle)^2\rangle} =
+    \left[
+    \begin{array}{c}
+         p_1(1-p_1)\\
+         p_2(1-p_2)\\
+         \vdots\\
+         p_n(1-p_n)\\
+    \end{array}
+    \right]= \mathbf{p}\odot (1-\mathbf{p}).
+\end{equation}
+
+
+\section{Distribuci\'on Multinomial, $\mathbf{X}\sim \text{Mult}(N,\mathbf{p})$}
+Modela la cantidad de veces que aparece cierta categor\'ia cuando se toman $N$ muestras. Es por tanto una suma de variables categ\'oricas. Su distribuci\'on es
+\begin{equation}
+    \text{Mult}(\mathbf{n}|N,\mathbf{p}) = \frac{N!}{n_1!n_2!...n_N!}p_1^{n_1}...p_N^{n_N}=N!\prod_{i=1}^{i=N}\frac{p_i^{n_i}}{n_i!}
+\end{equation}
+donde $n_i$ es la cantidad de veces que aparece la categor\'ia $i$ y su suma debe ser igual a $N$. Sus valor medio y varianza es
+\begin{equation}
+    \langle \mathbf{N}\rangle =
+    N\mathbf{p}
+    \qquad
+    \qquad
+    \langle (\mathbf{N}-\langle \mathbf{N}\rangle)^2\rangle =
+    N \mathbf{p}\odot (1-\mathbf{p})
+\end{equation}
+\section{Distribuci\'on Uniforme Discreta, $X\sim U(n)$.}
+Es una distribuci\'on que asigna a todos sus $n$ posibles resultados la misma probabilidad. En alg\'un sentido es la distribuci\'on fundamental de la interpretaci\'on cl\'asica de la probabilidad. Su uso se suele argumentar basandose en la simetr\'ia de sus elementos y el no tener una preferencia por alguno. Su distribuci\'on es
+\begin{equation}
+    \text{U}(i|n) = \frac{1}{n}.
+\end{equation}
+Una de sus caracter\'isticas es que es la distribuci\'on discreta de $n$ elementos que maximiza la entrop\'ia de Shannon, teniendo un valor de 
+\begin{equation}
+    H(\text{U}(n)) = \log(n).
+\end{equation}
+\section{Distribuci\'on de probabilidad hipergeom\'etrica, $X\sim \text{HG}(N,M,n)$}
+Es la distribuci\'on de probabilidad proveniente de hacer un muestreo sin remplazos, por lo que, estrictamente es la distribuci\'on que seguirian categor\'ias binarias en una encuesta. Por conveniencia, para esto \'ultimo se usa sencillamente una distribuci\'on binomial. Pero para esta aproximaci\'on es necesario que el segmento de poblaci\'on muestreado sea mucho menor que la poblaci\'on total. De no darse esta situaci\'on, se debe utilizar esta distribuci\'on.\par
+$N$ es el tamaño de la categoría 1,, $M$ el de la categoría 2 y $n$ es la cantidad de meustras realizadas. Debe darse que $n\leq N+M$. Su distribuci\'on es
+\begin{equation}
+    \text{HG}(x|N,M,n) = \frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}.
+\end{equation}
+\section{Distribuci\'on Geom\'etrica, $N\sim \GEO(p)$}
+Una distribuci\'on de probabilidad muy relevante es la denominada geom\'etrica. Se suele pensar como la cantidad de eventos que hay que intentar hasta que aparezca un \'exito de probabilidad $p$. $\mathbb{X}=\mathbb{N}$ con distribuci\'on
+\begin{equation}
+    \GEO(n|p) = p(1-p)^{n-1}.
+\end{equation}
+Su nombre viene de que cuando se calculan los valores medios muy frecuentemente el c\'alculo termina con la serie geom\'etrica. Su media est\'a dada por
+\begin{equation}
+    \langle N\rangle = \frac{1}{p} 
+\end{equation}
+y su varianza
+\begin{equation}
+    \sigma^2 = \frac{1-p}{p^2}.
+\end{equation}
+Su entrop\'ia est\'a dada por
+\begin{equation}
+    H(\GEO(p)) = \frac{HB(p)}{p}= -\frac{p\log p + (1-p)\log(1-p)}{p}
+\end{equation}
+\section{Distribuci\'on de Poisson, $N\sim \Poi(\lambda)$}
+Es una distribuci\'on de probabilidad muy \'util para estudiar mucha fenomelog\'ia muy variada. Desde cantidad de clientes en un d\'ia hasta la cantidad gotas de lluevia que caen en cierta regi\'on. Puede verse como un l\'imite de una distribuci\'on binomial cuando $N\to\infty$ y $pN\to \lambda$, lo que lleva a ser usado como aproximaci\'on de la distribuci\'on binomial cuando $p$ es pequeño y $N$ grande. A $\lambda$ se le llama su par\'ametro o media y da origen a una distribuci\'on de la forma
+\begin{equation}
+    \Poi(n|\lambda) = \frac{\lambda^n}{n!}e^{-\lambda}.
+\end{equation}
+Su media y varianza son ambas
+\begin{equation}
+    \langle N\rangle = \sigma^2=\lambda.
+\end{equation}
+Su entrop\'ia est\'a dada por 
+\begin{equation}
+    H(\Poi(\lambda))
+\end{equation}
