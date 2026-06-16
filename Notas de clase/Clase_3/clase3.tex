@@ -12,9 +12,23 @@ Evidentemente el problema de la comunicaci\'on no es el inter\'es de estas notas
 
 Si bien la teor\'ia de informaci\'on est\'a desarrollada tanto en variable aleatorias discretas como continuas -y con formulas muy similares- hay diferencias conceptuales que hacen que se tengan que estudiar teoricamente de forma muy difente. Estas diferencias no son superfluas y tienen consecuencias muy relevantes. De hecho, se suele decir que la definici\'on para variables aleatorias continuas ``no funciona tan bien'', lo que motiv\'o que hayan aparecido muchas alternativas a esta.
 \section{La entrop\'ia de Shannon}
-Las definiciones se pueden motivar de muchas formas. Yo en particular voy a motivarla de la misma forma que lo hizo Shannon que consiste en motivar que pretendemos de m\'etrica que diga cuanta informaci\'on brinda medir una variable aleatoria y luego obtener una formula resultante en funci\'on de las probabilidades.
+Las definiciones fundamentales de esta teoría se pueden motivar de muchas formas. Una de ellas es la planteada por Shannon en su trabajo original. Esta consiste en pedir ciertas propiedades que pretendemos que siga una noción de información como función de distribuciones de probabilidad definida en un conjunto de símbolos.
 
-{\bf Repasar Shannon}
+En escencia, lo que queremos hacer es armar una función $H$ que reciba una distribución de probabilidad discreta y nos diga ``{\it la cantidad de informaci\'on media que nos dar\'ia medirla}''. Supongamos que tenemos una variable aleatoria $X$ que toma valores en un alfabeto $\{a_1,...,a_n\}$ con distribución de probabilidad $p_1,p_2,...,p_n$. Luego vamos a pedir que $H$ satisfaga las siguientes propiedades:
+\begin{enumerate}
+    \item $H$ es una funci\'on continua de los valores $p_i$. Porque en pricipio distribuciones muy similares deberian aportar cantidades similares de informaci\'on.
+    \item Si todos los $p_i$ son iguales, entonces $H$ tiene que ser una funci\'on monotonamente creciente de $n$. Si tenemos eventos equiprobables y aumentamos la cantidad de desiciones posibles, entonces la informaci\'on deber\'ia ser mayor.
+    \item Si un resultado puede descomponerse en dos sucesivos, entonces $H$ deber\'ia ser la suma pesada de estos. 
+\end{enumerate}
+
+\begin{theorem}
+    La \'unica funci\'on $H$ que satisface estas propiedades tiene la forma
+    \begin{equation}
+        H = -K \sum^n_{i=1}p_i \log p_i
+    \end{equation}
+    con $K\in\mathbb{R}^+$.
+\end{theorem}
+Esto motiva la definici\'on de entrop\'ia. Un mito interesante sobre esta ecuaci\'on es que cuando Shannon la desarroll\'o no sab\'ia que nombre ponerle. Y en una conversaci\'on con Jhon von Neumann este le sugiri\'o llamarla ``entrop\'ia'' ya que la forma era igual a aquella de la f\'isica estad\'istica \footnote{Es aquella famosa f\'ormula pochoclera que de alguna manera mide el ``{\it caos}''.} y que a esta \'ultima nadie la entend\'ia muy bien.
 
 \begin{definition}
     Dada una variable aleatoria $X$ que toma valores en el alfabeto $\mathcal{A}= \{a_1,...,a_n\}$ con probabilidades $p(a_i) = p_i$. Se define su {\bf entrop\'ia} como 
@@ -30,8 +44,8 @@ Una aclaraci\'on importante es que la entrop\'ia no es una funci\'on de los resu
         H(a_i) = -\log_a p_i.
     \end{equation}
 \end{definition}
-Que basicamente es la cantidad de preguntas bien elegidas que necesitamos para determinar $X$ cuando el resultado es $a_i$. Adem\'as con esta definici\'on, la entrop\'ia se reduce al valor medio de la informaci\'on que obtenemos de medir la variable aleatoria.\par
-Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el n\'umero medio de preguntas -bien elegidas-  que necesitamos para determinar univocamente el valor de la variable aleatoria. Se puede demostrar matem\'aticamente que si todas probabilidades son potencias enteras de $1/2$, entonces si elegimos bien las preguntas binarias la media de preguntas que necesitemos va a coincider con la entrop\'ia y si no podemos, entonces la media de preguntas que vamos a necesitar est\'a acotado superiormente por la entrop\'ia m\'as 1.
+Que basicamente es la cantidad de preguntas bien elegidas que necesitamos para determinar $X$ cuando el resultado es $a_i$. Adem\'as con esta definici\'on, la entrop\'ia se reduce al valor medio de la informaci\'on que obtenemos de medir la variable aleatoria.
+
 \begin{theorem}
     Dada $X$  una variable aleatoria que toma valores en $\{a_1,...,a_n\}$ con distribuci\'on $p_1,...,p_n$. Siempre vale que
     \begin{enumerate}
@@ -49,7 +63,10 @@ Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el
 \end{theorem}
 Como no en ninguna parte de la expresiones de todo lo que desarrollamos hasta ahora aparecen los valores que toma la variable aleatoria la entrop\'ia y sus definiciones auxiliares generalmente no dependen de estos.
 
+\subsection{La entrop\'ia como n\'umero de preguntas bien elegidas}
+Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el n\'umero medio de preguntas -bien elegidas-  que necesitamos para determinar univocamente el valor de la variable aleatoria. Se puede demostrar matem\'aticamente que si todas probabilidades son potencias enteras de $1/2$, entonces si elegimos bien las preguntas binarias la media de preguntas que necesitemos va a coincider con la entrop\'ia y si no podemos, entonces la media de preguntas que vamos a necesitar est\'a acotado superiormente por la entrop\'ia m\'as 1.
 
+\subsection{Entrop\'ia conjunta y condicional}
 La teor\'ia necesita tambi\'en definiciones asociadas a cuando hay m\'as de una variable aleatoria en juego.
 \begin{definition}
     Dadas dos variables aleatorias $X$ y $Y$ que toman valores $\{x_1,...,x_n\}$ y $\{y_1,...,y_m\}$ respectivamente. Se define su {\bf entrop\'ia conjunta} como la cantidad
@@ -197,5 +214,77 @@ Los an\'alisis o transformaciones donde no perdemos informaci\'on son muy releva
     \end{equation}
 \end{definition}
 \section{Teor\'ia de informaci\'on para distribuciones continuas}
+En analog\'ia al caso discreto, se define la entrop\'ia diferencial como una cantidad que representa la informaci\'on otorgada por medir variables aleatorias continuas.
+\begin{definition}
+    Sean $X$ una variable aleatoria continua con densidad de probabilidad $p$. Se define la {\bf entrop\'ia diferencial} de $X$ como la cantidad
+    \begin{equation}
+        h(X) = - \int p(x) \ln p(x)\, dx.
+    \end{equation}
+\end{definition}
+Y por supuesto todas las definiciones que se despreden de la entrop\'ia discretas las adaptamos cambiando la sumatoria por una integral donde corresponda.
+
+A pesar de que el cambio de la sumatoria por integral parezca muy razonable, vamos a hacer las cuentas con m\'as cuidado discretizando el caso continuo y usando en el la f\'ormula de Shannon discreta. Supongamos que dividimos el intervalo continuo donde se define la distribuci\'on de probabilidad en subintervalos de grosor $\Delta$. Si los intervalos son suficientemente pequeños, la probabilidad de que salga cada uno de ellos es $p(x)\Delta$. Por tanto, usando la entrop\'ia discreta,
+$$
+    H(X) = -\sum p(x)\Delta \log (p(x)\Delta)
+$$
+$$
+     = \underbrace{-\sum p(x)\Delta \log p(x)}_{\to h(X)} \underbrace{-\sum p(x)\Delta \log \Delta}_{\to \infty}.
+$$
+Cuando tendemos $\Delta\to 0$ se puede pensar que $\sum \Delta \to \int$. Y as\'i el primer t\'ermino tiende a la entrop\'ia diferencial y el segundo diverge.
+
+Esto significa que la entrop\'ia diferencial no es una extensi\'on natural de la entrop\'ia discreta. Pues la entrop\'ia diferencial es la discreta con un infinito tachado. Y debido a tachar esta divergencia se pierden muchas propiedades del caso discreto. Detallamos algunas de estas perdidas te\'oricas en la siguiente proposici\'on.
+\begin{theorem}
+    Dada $X$ una variable aleatoria continua.
+    \begin{enumerate}
+    \item $h(X)$ no est\'a acotada inferiormente. Es decir, puede ser negativa.
+    \item $h(X)$ no siempre est\'a acotada superiormente. Cuando los valores que puede tomar la entrop\'ia est\'a acotado a una regi\'on de volumen $V$, luego tiene una cota m\'axima dada por
+    \begin{equation}
+        h(X) \leq \log(V)
+    \end{equation}
+    que se alcanza si y solo si la distribuci\'on es uniforme.
+    \item Si $X$ tiene unidades la entrop\'ia va a tener un logaritmo de unidades sumado.
+    \item La entrop\'ia diferencial no es invariante a cambios de coordenadas o transformaciones biyectivas. Esto es que si $Y=f(X)$ con $f$ una funci\'on biyectiva no necesariamente vale que $h(Y) = h(X)$.
+\end{enumerate}
+\end{theorem}
+Sin embargo, no todas las cantidades tienen un paso al continuo tan desagradable. Muchas, al depender de una resta, conservan mejor propiedades pues los infinitos se restan mutuamente llegando a resultados del caso discreto remplazando sumas por integrales. Este es el caso de la informaci\'on mutua y de la divergencia KL. 
 \section{La informaci\'on de Fisher}
-\section{Max Entropy}
+Supongamos que tenemos una distribuci\'on de probabilidad $X$ que depende de par\'ametros $\theta$. Queremos calcular cuanto cambia la distribuci\'on al variar estos par\'ametros diferencialmente. Para ello vamos a usar la divergencia KL.
+$$
+    D_{KL}(p(\theta)||p(\theta+d\theta))
+    =    -\left\langle \log\left(\frac{p(x|\theta+d\theta)}{p(x|\theta)}\right)\right\rangle
+$$
+Aproximando a primeros ordenes
+\begin{equation}
+    p(x|\theta+d\theta)\approx p(x|\theta) + \frac{\partial p(x|\theta)}{\partial \theta}d\theta +
+    \frac{1}{2}\frac{\partial^2 p(x|\theta)}{\partial \theta^2}d\theta^2
+\end{equation}
+y
+\begin{equation}
+    \ln(1+x) \approx 1+x -\frac{1}{2}x^2
+\end{equation}
+llegamos a que
+\begin{equation}
+    D_{KL}(p(\theta)||p(\theta+d\theta)) =
+    \frac{1}{2}\left\langle\left( \frac{\partial \log p(x|\theta)}{\partial \theta}\right)^2\right\rangle d\theta^2 = \frac{1}{2}J(\theta)d\theta^2
+\end{equation}
+donde $J(\theta) = \left\langle\left( \frac{\partial \log p(x|\theta)}{\partial \theta}\right)^2\right\rangle$.
+
+De ac\'a podemos ver detalles de cierta relevancia. Sumar $d\theta$ de un lado es lo mismo que restar $d\theta$ del otro. Pero como en la ecuaci\'on aparece este diferencial al cuadrado implica que $D_{KL}$ conmuta en cercan\'ias. Esto lo acerca a una noci\'on de distancia (que precisamente requiere esta conmutabilidad). Esto nos motiva a definir la siguiente cantidad
+\begin{definition}
+    Dada una variable aleatoria dependiente de una distribuci\'on de probabilidad param\'etrica  dependiente de $n$ par\'ametros continuos $\theta^1,...,\theta^n$, definimos su {\bf informaci\'on de Fisher} como
+    \begin{equation}
+        J(\theta)_{\mu\nu} = \left\langle \frac{\partial \log p(x|\theta)}{\partial \theta^\mu}
+        \frac{\partial \log p(x|\theta)}{\partial \theta^\nu}
+        \right\rangle.
+    \end{equation}
+\end{definition}
+\begin{theorem}
+    La informaci\'on de Fisher puede calcularse como
+    \begin{equation}
+        J(\theta)_{\mu\nu}= -\left\langle 
+            \frac{\partial^2 \ln p(x|\theta)}{\partial \theta^\mu\theta^\nu}
+        \right\rangle.
+    \end{equation}
+\end{theorem}
+\subsection{La cota de Cramer-Rao}
+\subsection{Interpretaci\'on geom\'etrica de la informaci\'on de Fisher}
