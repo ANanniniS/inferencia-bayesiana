@@ -370,5 +370,38 @@ De ac\'a podemos ver detalles de cierta relevancia. Sumar $d\theta$ de un lado e
         \right\rangle.
     \end{equation}
 \end{theorem}
-\subsection{La cota de Cramer-Rao}
+
 \subsection{Interpretaci\'on geom\'etrica de la informaci\'on de Fisher}
+
+Suele ser de utilidad contar con una noci\'on de distancia entre configuraciones de parámetros de distribuciones. Tarea para la que la divergencia $KL$ falló por carecer de la propiedad conmutativa.
+
+Supongamos que queremos medir la media de una distribuci\'on normal. Supongamos que el valor real es $\mu_0 = 0$, pero nosotros medimos $\mu_1$ ¿Qué tan grave fue nuestro error? Bueno, una manera bastante efectiva es comparar la diferencia de medias contra la desviación estándar. Por tanto una buena noción de distancia penalizaría diferencias de la media con más dureza si la desviación estandar es mayor.
+
+Ahora, si queremos medir la media y la desviación estándar. Si los valores reales son $(\mu_0,\sigma_0)$ y los medidos $(\mu_1,\sigma_1)$ ¿Qué criterio aplicamos para dar una distancia entre estos puntos? ¿Diferencias pesadas?
+
+Acá podemos usar a la información de Fisher, que recordamos nos da una noción de qué tanto cambia la distribuci\'on al variar los par\'ametros diferencialmente. Supongamos que tenemos un espacio continuo de par\'ametros $\Theta$, que pueden tener m\'ultiples dimensiones. Podemos expresar al par\'ametro seg\'un sus coordenadas $\theta = (\theta^1,...,\theta^n)$.
+
+
+Entonces la idea es: armamos una trayectoria desde el punto inicial al final y sumamos los cambios infinitesimales. Sea $\mathbf{r}:[0,1]\to \Theta$ una trayectoria diferenciable en el espacio de par\'ametros tal que
+\begin{equation}
+    \mathbf{r}(0) = \theta_0
+    \qquad
+    \mathbf{r}(1) = \theta_1
+\end{equation}
+donde $\theta_0$ y $\theta_1$ son los par\'ametros iniciales y finales de la trayectoria. 
+Podemos definir la longitud de la trayectoria, usando la informaci\'on de Fisher como
+\begin{equation}
+    \int_0^1 \sqrt{\sum_{\mu\nu}J_{\mu\nu}(\theta)\frac{dr^\mu}{dt}\frac{dr^\nu}{dt}}dt.
+\end{equation}
+Esta noci\'on de distancia est\'a definida como la suma de cambios por ir aumentando diferencial a diferencial la divergencia $KL$ entre puntos de la trayectoria.
+
+Pero no definimos distancia entre puntos, definimos longitudes de trayectorias. Para definir la distancia entre dos configuraciones de par\'ametros, tomamos la menor longitud posible de todas las trayectorias que los unan. 
+
+Ahora si contamos con una noci\'on de distancia entre configuraciones alejadas.
+
+
+
+
+
+
+\subsection{La cota de Cramer-Rao}
