@@ -3,14 +3,14 @@
 En 1948 Shannon publica un trabajo llamado ``A mathematical theory of communication''. En este Shannon intenta resolver un problema fundamental de las comunicaciones: 
 \begin{center}
     {\it
-        Para reducir la probabilidad de error al enviar un mensaje lo m\'as simple es repetirlo y de repetirlo infinitas veces el error tiende a 0 ¿Es posible hacer algo mejor que esto?
+        Para reducir la probabilidad de error al enviar un mensaje lo m\'as simple es repetirlo. Y de repetirlo infinitas veces el error tiende a 0 ¿Es posible hacer algo mejor que esto?
     }
 \end{center}
-En este trabajo Shannon demuestra que de hecho esta es una manera absolutamente ineficiente de transmitir mensajes con probabilidad de error 0. Ese logro lo motiva a publicar un libro el año siguiente junto a Warren Weaver con el nombre de ``The mathematical theory of communication''. Es decir, asciende su obra de decir que es una teor\'ia a decir que es {\it la teor\'ia} de la comunicaci\'on.
+En este trabajo, Shannon demuestra que hay maneras mucho más eficientes de transimitir mensajes sin probabilidad de error. Ese logro lo motiva a publicar un libro el año siguiente junto a Warren Weaver con el nombre de ``The mathematical theory of communication''. Es decir, asciende su obra de decir que es una teor\'ia a decir que es {\it la teor\'ia} de la comunicaci\'on.
 
-Evidentemente el problema de la comunicaci\'on no es el inter\'es de estas notas. Sin embargo lo que es incre\'ible es como esta teor\'ia resulto de gran utilidad en muy diversas \'areas: inform\'atica, inferencia estad\'istica (que si nos interesa), f\'isica, neurociencias, m\'usica, biolog\'ia, finanzas, etc. Es realmente poco razonable lo \'util que result\'o esta teor\'ia sujeto a que naci\'o de resolver un problema de ingenier\'ia muy concreto. Nosotros nos vamos a centrar en las aplicaciones de esta a probabilidad, inferencia estad\'istica y a Machine Learning.
+Evidentemente este problema de las telecomunicaciones no es el inter\'es de estas notas. Sin embargo lo que es increíble es como esta teoría resultó de gran utilidad en áreas muy diversas: informática, inferencia estadística (que si nos interesa), física, neurociencias, música, biología, finanzas, etc. Es realmente poco razonable lo \'util que result\'o esta teor\'ia sujeto a que naci\'o de resolver un problema de ingenier\'ia muy concreto. Nosotros nos vamos a centrar en las aplicaciones de esta a probabilidad, inferencia estad\'istica y Machine Learning.
 
-Si bien la teor\'ia de informaci\'on est\'a desarrollada tanto en variable aleatorias discretas como continuas -y con formulas muy similares- hay diferencias conceptuales que hacen que se tengan que estudiar teoricamente de forma muy difente. Estas diferencias no son superfluas y tienen consecuencias muy relevantes. De hecho, se suele decir que la definici\'on para variables aleatorias continuas ``no funciona tan bien'', lo que motiv\'o que hayan aparecido muchas alternativas a esta.
+Si bien la teor\'ia de informaci\'on est\'a desarrollada tanto en variables aleatorias discretas como continuas -y con formulas muy similares- hay diferencias conceptuales que hacen que se tengan que estudiar teoricamente de forma difente. Estas diferencias no son superfluas y tienen consecuencias muy relevantes. De hecho, se suele decir que la definici\'on para variables aleatorias continuas ``no funciona tan bien'', lo que motiv\'o que hayan aparecido muchas alternativas a esta.
 \section{La entrop\'ia de Shannon}
 Las definiciones fundamentales de esta teoría se pueden motivar de muchas formas. Una de ellas es la planteada por Shannon en su trabajo original. Esta consiste en pedir ciertas propiedades que pretendemos que siga una noción de información como función de distribuciones de probabilidad definida en un conjunto de símbolos.
 
@@ -34,17 +34,44 @@ Esto motiva la definici\'on de entrop\'ia. Un mito interesante sobre esta ecuaci
     Dada una variable aleatoria $X$ que toma valores en el alfabeto $\mathcal{A}= \{a_1,...,a_n\}$ con probabilidades $p(a_i) = p_i$. Se define su {\bf entrop\'ia} como 
     \begin{equation}
         H(X) = -\sum_i p_i \log_a p_i,
+        \label{3:eq:Shannon}
     \end{equation}
     donde $a$ es un real mayor a 1. La elecci\'on m\'as t\'ipica es $a=2$, y en este caso la unidad con la que se mide la entrop\'ia es el {\bf bit}.
 \end{definition}
-Una aclaraci\'on importante es que la entrop\'ia no es una funci\'on de los resultados posibles, es una funci\'on de la distribuci\'on de probabilidad entera. Pero tambi\'en es com\'un encontrar la siguiente definici\'on
+Una aclaraci\'on importante es que la entrop\'ia no es una funci\'on de los resultados posibles, es una funci\'on de la distribuci\'on de probabilidad entera. Pero tambi\'en es com\'un encontrar la siguiente definici\'on.
 \begin{definition}
     Dada una variable aleatoria $X$ que toma valores en el alfabeto $\mathcal{A}= \{a_1,...,a_n\}$ con probabilidades $p(a_i) = p_i$. La {\bf informaci\'on de $a_i$} est\'a dada por
     \begin{equation}
         H(a_i) = -\log_a p_i.
     \end{equation}
 \end{definition}
-Que basicamente es la cantidad de preguntas bien elegidas que necesitamos para determinar $X$ cuando el resultado es $a_i$. Adem\'as con esta definici\'on, la entrop\'ia se reduce al valor medio de la informaci\'on que obtenemos de medir la variable aleatoria.
+Con esta definici\'on, la entrop\'ia se reduce al valor medio de la informaci\'on que obtenemos de medir la variable aleatoria.
+\begin{example}
+    Sea $X\sim \Ber(p)$. Calcule $H(X)$. Encuentre su máximo como función de $p$. Grafique $H(X)$ como función de $p$.
+    {\bf Soluci\'on:}
+    
+    Usando la ecuaci\'on (\ref{3:eq:Shannon}), la entrop\'ia la calculamos como
+    \begin{equation}
+        H(X)= HB(p) = -p\log_2 p - (1-p)\log_2(1-p).
+    \end{equation}
+    Para encontrar su m\'aximo derivamos $HB$ respecto a $p$,
+    \begin{equation}
+        HB'(p) = -\log_2 p -\frac{1}{\ln 2} + \log_2(1-p) + \frac{1}{\ln 2} = - \log_2 \frac{p}{1-p}.
+    \end{equation}
+    Entonces de haber un m\'aximo $p^*$ debe satisfacer $HB'(p^*)=0$. Esto implica que $p^*$ deber\'ia ser necesariamente $1/2$. Con el criterio de la derivada segunda se puede ver que es efectivamente un m\'aximo.
+    En la figura \ref{3:fig:entropia_binaria} se grafica la funci\'on $HB$ y se puede corroborar lo deducido.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Clase_3/figs/entropia_binaria.png}
+        \caption{Entrop\'ia de una variable de Bernoulli.}
+        \label{3:fig:entropia_binaria}
+    \end{figure}
+
+    Podemos ver que cuando la variable aleatoria es uniforme se alcanza el m\'aximo de entrop\'ia. Esto no es una particularidad de la distribuci\'on de Bernoulli, sino de la entrop\'ia en general.
+\end{example}
+
+
 
 \begin{theorem}
     Dada $X$  una variable aleatoria que toma valores en $\{a_1,...,a_n\}$ con distribuci\'on $p_1,...,p_n$. Siempre vale que
@@ -59,12 +86,17 @@ Que basicamente es la cantidad de preguntas bien elegidas que necesitamos para d
             H(X)\leq \log n
         \end{equation}
         y esta cota m\'axima se alcanza si y solo si la distribuci\'on de probabilidad es uniforme.
+        \item Si definimos otra variable aleatoria $Y=f(X)$ con $f$ una funci\'on biyectiva,
+        \begin{equation}
+            H(Y) = H(X).
+        \end{equation}
+        Esto significa que la entrop\'ia no cambia si cambiamos los valores que toma el alfabeto o renombramos sus elementos.
     \end{enumerate}
 \end{theorem}
-Como no en ninguna parte de la expresiones de todo lo que desarrollamos hasta ahora aparecen los valores que toma la variable aleatoria la entrop\'ia y sus definiciones auxiliares generalmente no dependen de estos.
+Todas estas propiedades son lo que uno esperar\'ia de una buena noci\'on de informaci\'on. Primero, obviamente la informaci\'on no puede ser negativa. Segundo, si yo s\'e el resultado de una variable aleatoria entonces medirla no me transmitir\'ia ninguna informaci\'on. Tercero, la situaci\'on donde m\'as informaci\'on obtendr\'ia de medir la variable aleatoria es cuando no s\'e nada de ellas al punto de que me son indistinguibles. Cuarto, cambiar el nombre del alfabeto no va a cambiar la informaci\'on que obtenga. Da lo mismo si las respuestas posibles son 1, 2 o 3 o si son $a$, $b$ o $c$ siempre y cuando la estructura de probabilidades sea la misma.
 
 \subsection{La entrop\'ia como n\'umero de preguntas bien elegidas}
-Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el n\'umero medio de preguntas -bien elegidas-  que necesitamos para determinar univocamente el valor de la variable aleatoria. Se puede demostrar matem\'aticamente que si todas probabilidades son potencias enteras de $1/2$, entonces si elegimos bien las preguntas binarias la media de preguntas que necesitemos va a coincider con la entrop\'ia y si no podemos, entonces la media de preguntas que vamos a necesitar est\'a acotado superiormente por la entrop\'ia m\'as 1.
+Otra interpretaci\'on muy t\'ipica es pensar que la entrop\'ia -de base 2- es el n\'umero medio de preguntas binarias -bien elegidas-  que necesitamos para determinar univocamente el valor de la variable aleatoria. Se puede demostrar matem\'aticamente que si todas probabilidades son potencias enteras de $1/2$, entonces si elegimos bien las preguntas binarias la media de preguntas que necesitemos va a coincider con la entrop\'ia. Y en caso de no tener probabilidades que no sean potencias de $1/2$, entonces la media de preguntas que vamos a necesitar est\'a acotado superiormente por la entrop\'ia m\'as 1.
 
 \subsection{Entrop\'ia conjunta y condicional}
 La teor\'ia necesita tambi\'en definiciones asociadas a cuando hay m\'as de una variable aleatoria en juego.
@@ -80,7 +112,7 @@ La teor\'ia necesita tambi\'en definiciones asociadas a cuando hay m\'as de una 
 \end{definition}
 En escencia, la entrop\'ia conjunta se puede interpretar como la cantidad de preguntas necesarias para determinar simultaneamente los valores que toman $X$ e $Y$.
 
-Cuando determinamos el valor de $X$, debemos actualizar la distribuci\'on de probabilidad sobre $Y$ -usando la probabilidad condicional-, lo que modifica sus probabilidad. Entonces para cada resultado de $X$ vamos a tener una entrop\'ia de $Y$ diferente, luego, la media de entrop\'ia de $Y$ por haber determinado primero $X$ es exactamente su entrop\'ia condicional.
+Si determinamos primero el valor de $X$, debemos actualizar bayesianamente la distribuci\'on de probabilidad sobre $Y$. Entonces para cada resultado de $X$ vamos a tener una entrop\'ia de $Y$ diferente, luego, la media de entrop\'ia de $Y$ por haber determinado primero $X$ es su entrop\'ia condicional.
 
 \begin{theorem}
     Dadas $X$ e $Y$ variables aleatorias. Se puede demostrar que 
@@ -99,23 +131,38 @@ Cuando determinamos el valor de $X$, debemos actualizar la distribuci\'on de pro
         \end{equation}
     \end{enumerate}
 \end{theorem}
-Ambas propiedades tienen interpretaciones muy interesantes. En primer lugar, la ecuaci\'on de la regla de la cadena lo que nos dice es que la cantidad de preguntas necesarias para determinar $X$ e $Y$ es la cantidad de preguntas que necesitamos para determinar $X$ m\'as la cantidad de preguntas que necesitamos para determinar $Y$ sabiendo ya $X$. 
-Y lo que nos dice la condici\'on de independencia es que saber $Y$ no nos ahorra ninguna pregunta sobre $X$ si son independientes. Y adem\'as la informaci\'on para determinar $X$ e $Y$ en ese caso es la misma que necesitariamos para determinar $X$ e $Y$ por separado.
 
+Ambas propiedades tienen interpretaciones muy interesantes. En primer lugar, la regla de la cadena lo que nos dice es que la informaci\'on de determinar $X$ e $Y$ es la informaci\'on de determinar $X$ m\'as la de $Y$ sabiendo ya $X$. 
+
+Y lo que nos dice la condici\'on de independencia es que saber $Y$ no nos ahorra ninguna pregunta sobre $X$ si son independientes. Y adem\'as la informaci\'on de determinar $X$ e $Y$ en ese caso es la misma que necesitariamos de determinar $X$ e $Y$ por separado.
 
 
 \section{La divergencia KL y la informaci\'on mutua}
 \subsection{La divergencia KL}
-Supongamos que queremos determinar el valor de una variable aleatoria $X$. Nosotros creemos que la distribuci\'on que sigue es $p_i$. Por lo tanto armamos nuestro arbol de probabilidades para que determinar $a_i$ nos cueste $H(a_i)=-\log p_i$ preguntas. Sin embargo, el proceso que genera la variable aleatoria tiene una distribuci\'on de probabilidad $q_i$. Entonces si calculamos cuantas preguntas desperdiciamos por haber confundido la distribuci\'on de probabilidad la cuenta es la siguiente,
-\begin{equation}
+Supongamos que queremos determinar el valor de una variable aleatoria $X$. Nosotros creemos que la distribuci\'on que sigue es $p_i$. Por lo tanto armamos nuestro arbol de probabilidades para que determinar $a_i$ nos cueste (aproximadamente) $H(a_i)=-\log p_i$ preguntas. Sin embargo, la distribuci\'on que sigue $X$ no es $p_i$, sino $q_i$. Entonces al intentar obtener el valor que toma $X$ la vamos a meter en el arbol equivocado. El n\'umero medio de preguntas que vamos a necesitar es 
+$$
+    -\sum_i q_i \log p_i.
+$$
+Esta cantidad es muy relevante en ML con lo que merece su propio nombre.
+\begin{definition}
+    Dada una variable aleatoria $X$ que toma valores $\{a_1,...,a_n\}$. Sean $p_i$ (supuesta distribuci\'on) y $q_i$ (distribuci\'on real) distribuciones de probabilidad sobre el alfabeto. Definimos la {\bf entrop\'ia cruzada} o {\bf Cross-Entropy} entre $p_i$ y $q_i$ como
+    \begin{equation}
+        H(q,p) = -\sum_i q_i \log p_i.    
+    \end{equation}
+\end{definition}
+
+Hay que admitir que la notaci\'on confunde a la entrop\'ia cruzada con la entrop\'ia conjunta. Pero si nos fijamos que los argumentos que recibe la entrop\'ia conjunta son dos variables aleatorias diferentes mientras que en la entrop\'ia cruzada son distribuciones de probabilidad posibles sobre una misma variable aleatoria.
+
+Otra pregunta relevante puede ser cuantas preguntas estamos desperdiciando por haber confundido la variable aleatoria. La cuenta entonces ser\'ia
+$$
     \left\langle \text{Preguntas desperdiciadas}\right\rangle = 
     \left\langle \text{Preguntas hechas}\right\rangle
     -
     \left\langle \text{Preguntas necesarias}\right\rangle.
-\end{equation}
-Y esto motiva la siguiente definici\'on
+$$
+Identificando las preguntas hechas como la entrop\'ia cruzada y las que realmente necesitamos como la entrop\'ia se motiva la siguiente definici\'on.
 \begin{definition}
-    Se define la divergencia de Kullback-Leibler como la cantidad,
+    Se define la {\bf divergencia de Kullback-Leibler} entre $p$ y $q$ como la cantidad,
     \begin{equation}
         D_{KL}(p||q)-\sum p_i \log q_i + \sum p_i\log p_i =  \sum p_i\log\frac{p_i}{q_i}.
     \end{equation}
@@ -127,7 +174,44 @@ Y esto motiva la siguiente definici\'on
         \end{equation}
     y se anula si y solo si $p_i=q_i$.
 \end{theorem}
-Es muy importante notar que a pesar que es una cantidad muy buena para realizar comparaciones entre distribuciones, esta no es una {\it m\'etrica} en el espacio de estas ya que no satisface la conmutabilidad entre $p_i$ y $q_i$ ni la desigualdad triangular.
+
+Este \'ultimo teorema nos remarca una obviedad: hay que armar el arbol con la distribuci\'on real para no desperdiciar preguntas.
+
+Esta cantidad es muy relevante para hacer comparaciones entre distribuciones de probabilidad definidas en el mismo alfabeto. Sin embargo, no constituye lo que se llama una ``{\it m\'etrica}'' en el sentido matem\'atico porque no cumple las propiedades necesarias -como la conmutatividad. Adem\'as si $p$ est\'a definida en un punto donde $q$, la divergencia $KL$ diverge irremediablemente.
+
+
+\subsection{Uso de Cross-Entropy en contextos de ML}
+En contextos de ML aplicado a problemas de clasificaci\'on es muy com\'un utilizar como funci\'on de perdida a la entrop\'ia cruzada. En este caso toma el nombre de {\bf Cross-Entropy Loss}. 
+
+Supongamos que estamos entrenando un clasificador con $K$ etiquetas. Este recibe una entrada $\mathbf{x}$ que puede ser de cualquier naturaleza. Dependiendo el tipo de clasificaci\'on la entrada se va a someter a una serie de transformaciones que notamos. Luego, por cada etiqueta va a haber una funci\'on $f_k(\mathbf{x})$ que nota ``{\it cuanto de la etiqueta $k$ hay en la salida}''. Pero lo m\'as com\'un es pretender que haya una probabilidad por etiqueta, no solamente un n\'umero. Para ello se realiza una transformaci\'on m\'as,
+\begin{equation}
+    p_k(\mathbf{x}) = \frac{\exp(f_k(\mathbf{x}))}{\sum \exp(f_k(\mathbf{x}))}.
+\end{equation}
+A esta transformaci\'on se le suele denominar {\bf Soft min-max}.
+
+Luego, suponiendo que la distribuci\'on de probabilidad real es $q$, la entrop\'ia cruzada (usando el logaritmo natural) queda
+
+$$
+    H(q,p) = \sum q_k \ln p_k = \sum q_k \left( f_k - \ln\left(\sum_i f_i\right)\right)
+$$
+y como la suma de los $f_k$ no depende de $k$ y los $q_k$ deben estar normalizados,
+\begin{equation}
+    H(q,p) = \sum_k q_k f_k - \ln \left(\sum_k f_k\right).
+\end{equation}
+
+Notemos que optimizar la forma de $f$ para minimizar la entrop\'ia cruzada coincide con minimizar la divergencial $KL$. Esto se debe a que el t\'ermino que agrega la divergencia es independiente de $f$, solo depende de la distribuci\'on $q_k$.
+
+En la figura \ref{3:fig:cross-entropy} se esquematiza el uso del {\it Soft MinMax} y de la {\it Cross-Entropy Loss} es un modelo de clasificaci\'on con aprendizaje supervisado.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Clase_3/figs/cross-entropy.png}
+        \caption{Esquema de un modelo optimizado usando la Cross-Entropy Loss.}
+        \label{3:fig:cross-entropy}
+    \end{figure}
+
+
+
 \subsection{La informaci\'on mutua}
 Otra cantidad profundamente relevante es la que proviene de preguntarnos cu\'antas preguntas sobre $X$ nos ahorramos por saber $Y$.
 \begin{definition}

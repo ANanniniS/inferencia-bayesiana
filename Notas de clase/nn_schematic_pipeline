@@ -1,0 +1,48 @@
+// Pipeline Schema
+digraph Neural_Network_Pipeline {
+	dpi=300 rankdir=LR size="10,5"
+	node [color="#9CA3AF" fillcolor="#F3F4F6" fontname=Helvetica fontsize=12 shape=box style="filled,rounded"]
+	edge [arrowhead=vee color="#4B5563" fontname=Helvetica fontsize=10]
+	subgraph cluster_inputs {
+		bgcolor="#EFF6FF" color="#3B82F6" label="Input Nodes" style=dashed
+		x1 [label="x₁"]
+		x2 [label="x₂"]
+		x3 [label="x₃"]
+	}
+	subgraph cluster_transformation {
+		bgcolor="#ECFDF5" color="#10B981" label="Transformation
+(Weights & Bias)" style=solid
+		f_x [label="Linear Projection
+(W · x + b)" fillcolor="#D1FAE5"]
+	}
+	subgraph cluster_outputs {
+		bgcolor="#F9FAFB" color="#6B7280" label="Output Nodes
+(Logits)" style=dashed
+		z1 [label="z₁"]
+		z2 [label="z₂"]
+		z3 [label="z₃"]
+	}
+	subgraph cluster_minmax {
+		bgcolor="#F5F3FF" color="#8B5CF6" label="Softmin / Softmax
+Transformation" style=solid
+		sm [label="Softmax / Softmin
+Exponentiation & Normalization" fillcolor="#DDD6FE"]
+	}
+	subgraph cluster_loss {
+		bgcolor="#FEF2F2" color="#EF4444" label="Loss Function" style=solid
+		ce_loss [label="Cross Entropy Loss
+-Σ yᵢ log(p_i)" fillcolor="#FEE2E2"]
+	}
+	x1 -> f_x
+	x2 -> f_x
+	x3 -> f_x
+	f_x -> z1
+	f_x -> z2
+	f_x -> z3
+	z1 -> sm
+	z2 -> sm
+	z3 -> sm
+	sm -> ce_loss
+	y [label="Ground Truth (y)" color="#F59E0B" fillcolor="#FEF3C7"]
+	y -> ce_loss [style=dashed]
+}
