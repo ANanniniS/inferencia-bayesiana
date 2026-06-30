@@ -1,0 +1,58 @@
+\newpage
+\section*{Practica 3}
+\subsection*{1: Entrop\'ia de variables aleatorias discretas.}
+Calcule la entrop\'ia de las siguientes variables aleatorias. Grafique los resultados en funci\'on de los par\'ametros. Interprete los resultados todo lo que pueda en funci\'on de las propiedades demostradas y de su intuici\'on sobre la informaci\'on.
+\begin{enumerate}
+    \item Bernoulli de par\'ametro $p$.
+    \item Una variable aleatoria discreta uniforme con $N$ posibles valores.
+    \item Binomial de par\'ametros $p$ y $n$.
+    \item Poisson de par\'ametro $\lambda$.
+\end{enumerate}
+
+\subsection*{2: Max entropy en variables aleatorias discretas.}
+Sea $X$ una variable aleatoria discreata con alfabeto $\{a_1,...,a_n\} \subseteq \mathbb{R}$ y distribuci\'on $\{p_1,...,p_n\}$.
+\begin{enumerate}
+    \item Encuentre la distribuci\'on de probabilidad que maximice la entrop\'ia.
+    \item Utilizando multiplicadores de Lagrange, encuentre la distribuci\'on de probabilidad de media $\mu$ que maximice la entrop\'ia.
+    \item Nuevamente, utilice los multiplicadores de Lagrange, para encontrar la distribuci\'on de m\'axima entrop\'ia entre aquellas que satisfacen 
+    \begin{equation}
+        \langle f(X) \rangle = \tau
+    \end{equation}
+\end{enumerate}
+Busque similitudes entre las f\'ormulas descubiertas y la ecuaci\'on (\ref{3:eq:softminmax}).
+
+\subsection*{3: N\'umero de preguntas de tirar una moneda hasta que salga cara.}
+Se tira una moneda (no cargada) tantas veces como haga falta hasta que salga la primera cara. Siendo $X$ el n\'umero de tiros que hacen falta, encuentre
+\begin{enumerate}
+    \item La entrop\'ia en bits.
+    \item Una estrategia de preguntas binarias eficiente. Compare el n\'umero medio de preguntas con el resultado del apartado anterior.
+\end{enumerate}
+Considere ahora que la moneda est\'a cargada y repita los apartados anteriores.
+
+\subsection*{4: Implementaci\'on de un clasificador con funci\'on de perdida Cross-Entropy}
+
+\subsection*{Cota de independencia}
+Demuestre e interprete que 
+\begin{equation}
+    H(X,Y) \leq H(X) + H(Y).
+\end{equation}
+
+\subsection*{5: Popurri de ejercicios sobre la informaci\'on de preguntas.}
+\begin{enumerate}
+    \item Se tienen tres cartas. Una de ellas es blanca de ambos lados, otra es negra de ambos lados, y la tercera es blanca de un lado y negra del otro. Se mezclan  las cartas, cambiando sus posiciones y sus orientaciones. Se extrae una carta al azar, se la pone sobre la mesa, y se observa el color de la cara expuesta ¿Cuánta información brinda el color de la cara expuesta acerca del color de la cara oculta?
+    \item Ana tiene dos hermanas: Beatriz y Camila (no son mellizas ni trillizas). Usted le pregunta a Ana:
+    \begin{center}
+        {\it ¿Sos m\'as grande que Beatriz?}
+    \end{center}
+    Determine la cantidad de informaci\'on que brinda la respuesta de Ana acerca si ella es m\'as grande o m\'as chica que Camila.
+    \item Los habitantes de Micenas dicen la verdad dos tercios de la veces. Clitemnestra aparece muerta, y existe 50\% de probabilidad de que el asesino sea su hijo Orestes.
+    \begin{enumerate}
+        \item Usted le pegunta a Orestes si mat\'o o no mat\'o a su madre. Caclule la informaci\'on que da la respuesta de Orestes acerca de si \'el es el asesino.
+        \item Por las dudas, usted tambi\'en le pregunta a Electra (la hermana de Orestes) si fue \'el el asesino:
+        \begin{enumerate}
+            \item Calcula la informaci\'on que brinda la respuesta de Electra.
+            \item Calcule la informaci\'on que brindan ambas respuestas juntas.
+            \item Compare ambas cantidades entre s\'i, y comparelas con el resultado del punto anterior.
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
