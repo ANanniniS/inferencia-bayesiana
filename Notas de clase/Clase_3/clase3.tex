@@ -319,6 +319,22 @@ Los an\'alisis o transformaciones donde no perdemos informaci\'on son muy releva
         I(X,Y) = I(X,Z).
     \end{equation}
 \end{definition}
+\subsection{La desigualdad del procesamiento de datos en el contexto de clasificaci\'on de im\'agenes}
+Para ejemplificar lo discutido en la secci\'on anterior consideramos un problema de clasificaci\'on. Consideramos el t\'ipico problema de clasificaci\'on de d\'igitos d\'onde entra una foto de $28\times 28$ en escala de grises y armamos una red que la clasifique. 
+
+En este caso la variable aleatoria que queremos determinar, $X$, es el d\'igito al que se le sac\'o la foto y su alfabeto es simple $\{a_0=0,a_1=1,...,a_9=9\}$. La variable aleatoria la cual podemos analizar no es directamente $X$, si no, la imagen que genera. Llamamos $Y$ a la variable aleatoria de la foto que genera el d\'igito. En este caso el alfabeto de $Y$ est\'a compuesto por todas las fotos posibles. Como cada foto est\'a compuesta por $28^2$ pixeles de los cuales cada uno tiene uno de 256 valores de grises el alfabeto de $Y$ tiene $256^{(28\times 28)}$ elementos. Nosotros hacemos un an\'alisis de datos de $Y$ con el objetivo de recuperar el valor de $X$. Este an\'alisis puede ser pensando como otra variable aleatoria $Z$ que solo ve a $Y$. Es decir, que tenemos la distribuci\'on de probabilidad $P(z|y)$ y aunque sepamos el valor de $X$ esta distribuci\'on no va a cambiar $P(z|y,x)=P(z|y)$. $Z$ va a tener el mismo alfabeto de $X$, pues es la predicci\'on. Esta estructura condicional y de procesamiento se ilustra en la figura \ref{3:fig:data-inequality}. Lo que nos dice la desigualdad del procesamiento de datos en este caso es que la informaci\'on mutua entre el d\'igito real y la foto es siempre mayor que la informaci\'on mutua entre el d\'igito y nuestra predicci\'on.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Clase_3/figs/data_analysis_inequality.png}
+    \caption{Estructura condicional en la desigualdad del procesamiento de datos.}
+    \label{3:fig:data-inequality}
+\end{figure}
+
+Lo mismo podemos pensar si agregamos capas sucesivas de procesamiento. Cada capa extra va a tener menos informaci\'on mutua que la anterior. Esto de ninguna manera significa que agregar una capa interna sea necesariamente malo, puede ser \'util para llegar a un proceso sistem\'atico de clasificaci\'on al que la teor\'ia de informaci\'on sea ciega. Al fin y al cabo la teor\'ia nos dice m\'aximos posibles, pero no como llegar a ellos.
+
+Nuevamente, muchos procesos de clasificaci\'on utilizan como funci\'on de perdida la entrop\'ia cruzada. Pero minimizar la entrop\'ia cruzada es lo mismo que maximizar la informaci\'on mutua. Por lo tanto, esta desigualdad pone un m\'aximo sobre lo que se puede alcanzar en esta funci\'on de perdida.
+
 \section{Teor\'ia de informaci\'on para distribuciones continuas}
 En analog\'ia al caso discreto, se define la entrop\'ia diferencial como una cantidad que representa la informaci\'on otorgada por medir variables aleatorias continuas.
 \begin{definition}
@@ -393,9 +409,102 @@ De ac\'a podemos ver detalles de cierta relevancia. Sumar $d\theta$ de un lado e
     \end{equation}
 \end{theorem}
 
+\begin{example}
+    Sea una distribuci\'on de Bernoulli de par\'ametro $p$. Calcule la informaci\'on de Fisher.
+    
+    {\bf Soluci\'on:} En este caso la distribuci\'on depende de un \'unico par\'ametro, por lo que la informaci\'on de Fisher son elementos de una matriz $1\times 1$, es decir, un n\'umero. Para facilitar las cuentas podemos escribir a la distribuci\'on de Bernoulli como
+    $$
+        P(x|p) = p^{x}(1-p)^{1-x},
+    $$
+    donde $x\in\{0,1\}$.
+    $$
+        f(p)=\ln p(x|p) = x \ln p + (1-x) \ln (1-p).
+    $$
+    Derivando con respecto a $p$,
+    $$
+        f'(p) = \frac{x}{p} - \frac{1-x}{1-p}
+    $$
+    $$
+        f''(p) = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
+    $$
+    Tomando el valor medio de esta funci\'on,
+    $$
+        J(p) = -\left\langle -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}\right\rangle = \frac{\langle x\rangle}{p^2} + \frac{1-\langle x\rangle}{(1-p)^2}=
+    $$
+    $$
+        = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}.
+    $$
+\end{example}
+
+\begin{example}
+    Sea una distribuci\'on normal de par\'ametros $\mu$ y $\sigma$. Calcule la informaci\'on de Fisher.
+
+    {\bf Soluci\'on:} En este caso hay dos par\'ametros por lo que la informaci\'on de Fisher son los elementos de una matriz $2\times 2$. Tenemos que calcular por separado 3 valores medios,
+    $$
+        J_{\mu\mu} = -\left\langle \frac{\partial^2 \ln p(x|\mu\sigma)}{\partial \mu^2} \right\rangle
+    $$
+    $$
+        J_{\mu\sigma} = -\left\langle \frac{\partial^2 \ln p(x|\mu\sigma)}{\partial \mu\partial \sigma} \right\rangle
+    $$
+    $$
+        J_{\sigma\sigma} = -\left\langle \frac{\partial^2 \ln p(x|\mu\theta)}{\partial \sigma^2} \right\rangle
+    $$
+    Calculamos el primero a modo de ejemplo y los dem\'as quedan como ejercicios.
+    $$
+        \ln p(x|\mu\sigma) = C -\ln \sigma -\frac{1}{2\sigma}(x-\mu)^2\overbrace{\to}^{\partial \mu} \frac{1}{\sigma^2}(x-\mu)\overbrace{\to}^{\partial \mu} -\frac{1}{\sigma^2}
+    $$
+    $$
+    \overbrace{\to}^{-\langle\cdot\rangle} J_{\mu\mu}(\mu,\theta) = \frac{1}{\sigma^2}
+    $$
+    Si completamos el resto de elementos de la matriz llegamos al resultado
+    \begin{equation}
+        J(\mu,\sigma) = \frac{1}{\sigma^2}
+        \left[\begin{matrix}
+            1 & 0\\
+            0 & 2
+        \end{matrix}\right]
+    \end{equation}
+\end{example}
 
 \subsection{La informaci\'on de Fisher en contextos de inferencia bayesiana}
 
+Supongamos que queremos determinar los par\'ametros $\theta = (\theta^1,...,\theta^n)\in \Theta$ que producen una distribuci\'on de probabilidad $p(x|\theta)$ contando con muchas muestras. Para ello buscamos su distribuci\'on conjugada. El m\'aximo de la distribuci\'on conjugada $\theta_{ML}$ se denomina estimador de m\'axima verosimilitud. Se puede demostrar que este estimador converge a la distribuci\'on de par\'ametros correcta $\theta_{True}$ en el l\'imite de muchas muestras.
+
+Planteamos el log-Likelyhood,
+\begin{equation}
+    \mathcal{L}_\mathbf{x}(\theta) = \ln p(\mathbf{x}|\theta)= \sum_i \ln p(x_i|\theta).
+\end{equation}
+Luego de muchas muestras, va a haber un m\'aximo empinado alrededor de $\theta_{ML}$ (que a su vez debe estar cerca de $\theta_{True}$). Realizamos una expansi\'on de Taylor de segundo orden alrededor de $\theta_{ML}$,
+\begin{equation}
+    \mathcal{L}_\mathbf{x}(\theta) = \mathcal{L}_\mathbf{x}(\theta_{ML}) + \left.\frac{\partial \mathcal{L}_\mathbf{x}}{\partial \theta^\mu}\right|_{\theta_{ML}}(\theta^\mu- \theta^\mu_{ML})
+    + \frac{1}{2}\left.\frac{\partial^2 \mathcal{L}_\mathbf{x}}{\partial \theta^\mu\partial \theta^\nu}\right|_{\theta_{ML}}(\theta^\mu- \theta^\mu_{ML})(\theta^\nu- \theta^\nu_{ML})
+\end{equation}
+La derivada primera se anula porque estamos en el m\'aximo de verosimilitud. La segunda en cambio
+\begin{equation}
+    \left.\frac{\partial^2 \mathcal{L}_\mathbf{x}}{\partial \theta^\mu\partial \theta^\nu}\right|_{\theta_{ML}} =
+    \sum \frac{\partial^2}{\partial \theta^\mu\partial\theta^\nu}\ln p(x_i|\theta)
+\end{equation}
+En el l\'imite de muchas muestras esta cantidad converge a su valor medio te\'orico y $\theta_{True}\approx \theta_{ML}$. Con lo que
+\begin{equation}
+    \left.\frac{\partial^2 \mathcal{L}_\mathbf{x}}{\partial \theta^\mu\partial \theta^\nu}\right|_{\theta_{ML}} \overbrace{\approx}^{\text{Ley de los \\ grandes n\'umeros}}
+    \left\langle \frac{\partial^2}{\partial \theta^\mu\partial\theta^\nu}\ln p(\mathbf{x}|\theta_{ML})\right\rangle
+    \overbrace{\approx}^{\theta_{True}\approx\theta_{ML}} -N J_{\mu\nu}(\theta_{ML})
+\end{equation}
+Por lo tanto, la log-likelyhood,
+\begin{equation}
+    \mathcal{L}_\mathbf{x}(\theta) = \mathcal{L}_\mathbf{x}(\theta_{ML}) 
+    - \frac{1}{2}NJ_{\mu\nu}(\theta_{ML})(\theta^\mu- \theta^\mu_{ML})(\theta^\nu- \theta^\nu_{ML}).
+\end{equation}
+Ergo, la distribuci\'on conjugada es 
+\begin{equation}
+    p(\theta|\mathbf{x}) \propto \exp\left(- \frac{1}{2}NJ_{\mu\nu}(\theta_{ML})(\theta^\mu- \theta^\mu_{ML})(\theta^\nu- \theta^\nu_{ML})\right)
+\end{equation}
+La dependencia es por lo tanto la de una gausseana con matriz de convarianza siendo la inversa de $NJ_{\mu\nu}(\theta_{ML})$,
+\begin{equation}
+    p(\theta|\mathbf{x}) = \sqrt{\det\left( \frac{J(\theta)}{2\pi}  \right)} \exp\left(- \frac{1}{2}NJ_{\mu\nu}(\theta_{ML})(\theta^\mu- \theta^\mu_{ML})(\theta^\nu- \theta^\nu_{ML})\right).
+\end{equation}
+
+En conclusi\'on, despu\'es de hacer un gran muestreo, la distribuci\'on conjugada sobre el par\'ametro que queremos determinar converge a una distribuci\'on gausseana centrada en el par\'ametro real con matriz de convarianzas igual a la inversa de la informaci\'on de Fisher. Es decir, el tensor de Fisher nos va a indicar qu\'e tan buena es la distribuci\'on de probabilidad cuando se tiene el objetivo de determinar un par\'ametro. Adem\'as, nos muestra algo que ya sabiamos desde el teorema central del l\'imite: La invarianza del par\'ametro a determinar crece linealmente con la cantidad de muestras.
 
 \subsection{Interpretaci\'on geom\'etrica de la informaci\'on de Fisher}
 
@@ -424,10 +533,3 @@ Esta noci\'on de distancia est\'a definida como la suma de cambios por ir aument
 Pero no definimos distancia entre puntos, definimos longitudes de trayectorias. Para definir la distancia entre dos configuraciones de par\'ametros, tomamos la menor longitud posible de todas las trayectorias que los unan. 
 
 Ahora si contamos con una noci\'on de distancia entre configuraciones alejadas.
-
-
-
-
-
-
-\subsection{La cota de Cramer-Rao}
