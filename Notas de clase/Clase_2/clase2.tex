@@ -55,6 +55,23 @@ Esta terminología nace de que practicamente en todo problema de inferencia cada
     \item La posteriori -o posterior- $P(\theta|\mathbf{x})$: cuantifica el grado de creencia sobre los valores de $\theta$ actualizadas por las mediciones realizadas.
     \item La evidencia -o evidence- $P(\mathbf{x})$: nombrada así por ser la probabilidad de aquello que entendemos por la evidencia a favor de una determinación de parámetros sobre otra. En el proceso de inferencia es la parte que menos ``arte'' tiene, pues se puede calcular utilizando la normalización de la posteriori. Además, es importante notar que este término es independiente del parámetro que se busca determinar.
 \end{itemize}
+
+
+\subsection{Realizando predicciones}
+Muchas veces no es realmente el objetivo final obtener el valor correcto de los par\'ametros $\theta$. Mientras que si lo es obtener la distribuci\'on de probabilidad que siguen las pr\'oximas mediciones.
+
+El enfoque m\'as simple consiste en usar las mediciones obtenidas para hacer una estimaci\'on de $\theta$. Para esto podemos utilizar la teor\'ia de estimadores y herramientas como Maximum Likelyhood o Maximum a Posteriori para realizar una estimaci\'on puntual de $\theta$. Otra teor\'ia de utilidad es la denominada {\it teor\'ia de desiciones} que nos da criterios para elegir un buen estimador basado en el contexto. Llamando $\theta^*$ a la estimaci\'on, luego podemos decir que la distribuci\'on que va a seguir la pr\'oxima medici\'on es 
+\begin{equation}
+    P(x|\theta^*(\mathbf{x})).
+\end{equation}
+
+Alternativamente, un an\'alisis bayesiano provendr\'ia de utilizar directamente la distribuci\'on a posteriori de $\theta$ para calcular con el teorema de Bayes la distribuci\'on de probabilidad de $x$,
+\begin{equation}
+    P(x|\mathbf{x}) = \int P(x|\theta)\overbrace{P(\theta|\mathbf{x})}^\text{posteriori}d\theta.
+\end{equation}
+
+
+
 \subsection{La naturaleza del espacio donde viven\\ los parámetros}
 Hasta ahora no aclaramos que si los parámetros $\theta$ son discretos o continuos. Tampoco aclaramos si tienen una o varias dimensiones. La razón de esto es que la argumentación para estos tópicos no requiere separar por casos. Sin embargo es útil tener una noción de la naturaleza que podrían tener estos espacios. Algunos ejemplos de la forma que tienen estos espacios pueden ser:
 \begin{itemize}
@@ -193,3 +210,23 @@ Desarrollando esta expresi\'on obtenemos
     P_\mathbf{x}(\theta|\mathbf{y}) = P(\theta|\mathbf{x,y}).
 \end{equation}
 Esto quiere decir que al actualizar nuestras creencias nuevamente podemos usar la primera priori y actualizar con todas las mediciones juntas. Como bien podr\'iamos actualizar la priori una segunda vez en virtud del teorema de Bayes. Esto justificar\'ia olvidarnos de las primeras mediciones y guardar su informaci\'on en una priori actualizada.
+\section{Elecci\'on de modelos}
+
+Ahora, supongamos que sacamos muestras $x_i$. De momento no sabemos cual es la distribuci\'on de probabilidad que siguen las muestras, pero tenemos $L$ modelos diferentes $\{\mathcal{M}_i\}$ con $i=1,...,L$. Es decir, tenemos la estructura condicional dada por $P(x|\mathcal{M_i})$. Podemos pensar que en escencia estamos en una situaci\'on como la anterior pero determinando un par\'ametro discreto $i$.
+
+Nuevamente, el valor de la evidencia para apoyar una hip\'otesis frente a las dem\'as viene dado por la likelyhood $P(\mathbf{x}|\mathcal{M}_i)$ y el valor de la priori $P(\mathcal{M}_i)$ va a demostrar predilecci\'on de un modelo frente a los dem\'as. De la actualizaci\'on bayesiana de nuestras creencias se deduce que,
+\begin{equation}
+    P(\mathcal{M}_i|\mathbf{x}) \propto P(\mathbf{x}|\mathcal{M}_i)P(\mathcal{M}_i).
+\end{equation}
+
+Una manera muy t\'ipica de comparar dos modelos $\mathcal{M}_1$ y $\mathcal{M}_2$ es considerar el cociente de las posterioris,
+\begin{equation}
+    \frac{P(\mathcal{M}_2|\mathbf{x})}{P(\mathcal{M}_1|\mathbf{x})}
+    =
+    \overbrace{\frac{P(\mathbf{x}|\mathcal{M}_2)}{P(\mathbf{x}|\mathcal{M}_1)}}^{\text{Factor de Bayes}}\frac{P(\mathcal{M}_2)}{P(\mathcal{M}_1)}.
+\end{equation} 
+En escencia, el factor de Bayes es aquel que indica como la evidencia favorece un modelo sobre otro.
+
+Alg\'un modelo puede depender de alg\'un par\'ametro adicional, lo llamamos $\theta$. En este caso vamos a necesitar la distribuci\'on condicional $P(\theta|\mathcal{M}_i)$.
+
+Si quisieramos realizar predicciones tenemos nuevamente dos enfoques. El primero, m\'as simple, es elegir un modelo y luego usar su distribuci\'on de probabilidad. El segundo consiste en calcular la distribuci\'on de $\mathbf{x}$ con la posteriori de cada modelo por separado.

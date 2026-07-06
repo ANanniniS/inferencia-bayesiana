@@ -1,1 +1,68 @@
 \chapter{Regresiones en contextos bayesianos}
+
+Una situaci\'on muy usual y estudiada en estad\'istica es la de las regresiones o ajustes. Supongamos que queremos predecir el valor de una variable $t$. Y al momento de hacer modelar aparecen dos tipos distintos de par\'ametros. El primer tipo de par\'ametros son aquellos que est\'an fijos para todas las mediciones y los queremos determinar, a estos los llamamos par\'ametros ocultos. El segundo tipo son aquellos que si sabemos con certeza su valor y pueden variar de medici\'on a medici\'on, a estos los llamamos par\'ametros de control.
+
+A modo de ejemplo consideremos que un cient\'ifico con una colonia de bacterias que crece sin control. Un modelo matem\'atico muy preciso para esta situaci\'on es el exponencial. Es decir, la cantidad de bacterias est\'a dado por 
+\begin{equation}
+    N(t) = N_0 2^\frac{t}{\tau}
+\end{equation}
+donde $t$ es el tiempo en el que se evalua la cantidad de bacterias, $N_0$ es la cantidad inicial de bacterias y $\tau$ es la cantidad de tiempo que tarda en duplicarse la poblaci\'on.
+
+A nosotros lo que nos interesa es determinar $\tau$ utilizando fotos que nos indican la cantidad de individuos que tiene la colonia. En este caso los par\'ametros ocultos son $N_0$ y $\tau$ mientras que el controlable es el tiempo en el que se toman las fotos. 
+
+Un primer enfoque, muy ingenuo, ser\'ia decir: Tengo dos par\'ametros libres y cada medici\'on me da una ecuaci\'on por tanto mido dos veces y con ello deber\'ia ser capaz de estimarlos. En efecto, si las fotos se toman en tiempo $t_0=0$ y $t_1$ podr\'iamos inferir
+$$
+    N_0 = N(0)
+    \qquad
+    \tau = \frac{t_1}{\log_2(N(t_1)/N(0))}.
+$$
+
+Luego de hacer esto, lo m\'as probable es que nos llevemos una triste sorpresa al medir por tercera vez. La realidad rara vez coincide estrictamente con nuestros modelos. En este caso cosas que pudieron fallar fueron mediciones imprecisas o que las bacterias no se comporten exactamente con el modelo exponencial.
+
+En contraposici\'on a esto podr\'iamos decidir sacar muchas fotos en tiempos $t_1,...,t_M$ obteniendo tamaños de colonias $N_1,...,N_M$. Ahora usando estas mediciones estamos interesados en elegir un valor de $\tau$ que responda a lo que hicimos. Para elegir los par\'ametros $N_0$ y $\tau$ un enfoque t\'ipico es definir una {\bf funci\'on de perdida}. Esta recibe posibles valores de los par\'ametros y da valores elevados si las mediciones est\'an muy alejadas de la curva. Una elecci\'on com\'un es la llamada perdida de suma de cuadrados,
+$$
+    \mathcal{L}(N_0,\tau) = \sum_i \left( N_0 2^\frac{t_i}{\tau} - N_i      \right)^2.
+$$
+
+Una vez definida la funci\'on de perdida, que castiga la definici\'on de curvas alejadas a los puntos medidos, se eligen los par\'ametros que minimizan esta cantidad. Utilizando esta funci\'on de perdida se suele hablar de {\bf m\'inimos cuadrados}. 
+
+\section{Interpretaci\'on bayesiana de los procesos de ajuste}
+Con el objetivo de obtener resultados m\'as generales vamos a abstraer un poco m\'as la situaci\'on. Supongamos que queremos predecir el valor de una variable aleatoria $T$. Tenemos un modelo que nos dice que est\'a compuesto de la siguiente forma
+\begin{equation}
+    T = f(\mathbf{x},\theta) + \epsilon
+\end{equation}
+donde $f$ es una funci\'on que depende de dos tipos de par\'ametros: los ocultos ($\theta$) y los controlables ($\mathbf{x}$). Y $\epsilon$ es ruido que se le añade al modelo. Este \'ultimo puede deverse al m\'etodo de medici\'on o a factores estad\'isticos propios del sistema. T\'ipicamente se habla de que la media del ruido es 0.
+
+Si el ruido es gaussiano de media nula y desviaci\'on est\'andar $\sigma$ entonces estamos diciendo que nuestro sistema estad\'istico sigue la siguiente ley
+\begin{equation}
+    P(t|\mathbf{x},\theta) = \mathcal{N}(t|f(\mathbf{x},\theta),\sigma^2).
+\end{equation}
+Supongamos que hacemos $N$ mediciones con valores controlables $\mathbf{x}_1,...,\mathbf{x}_N$ que dieron como resultado $t_1,...,t_N$. Como el objetivo es obtener el valor de los par\'ametros $\theta$ vamos a utilizar el estimador maximum likelyhood. Es decir vamos a maximizar la cantidad $P(t_1,...,t_N|(\mathbf{x}_1,...,\mathbf{x}_N),\theta)$. Asumiendo que las mediciones son condicionalmente independientes la verosimilitud est\'a dada por
+\begin{equation}
+    P(t_1,...,t_N|(\mathbf{x}_1,...,\mathbf{x}_N),\theta) = P(t_1|\mathbf{x}_N,\theta)...P(t_N|\mathbf{x}_N,\theta).
+\end{equation}
+Y por supuesto, maximizarla es equivalente a maximizar su logaritmo. Por lo que la cantidad a maximizar es 
+\begin{equation}
+    \mathcal{L}(\theta) = \sum \ln P(t_i|\mathbf{x}_i,\theta) = -\frac{1}{2\sigma^2} \sum (f(\mathbf{x}_i,\theta)-t_i)^2.
+\end{equation}
+
+Entonces lo que vemos es sencillo, vemos que la t\'ecnica de m\'inimos cuadrados de la estad\'istica puede ser interpretada como ML desde un punto de vista bayesiano asumiendo errores gaussianos.
+
+\subsection{El overfitting}
+Es muy usual encontrar diferentes modelos de ajustes que dependen de muchisimos par\'ametros. En esta categor\'ia podriamos encontrar a cualquier modelo de redes neuronales. Esto podr\'ia no paracer problem\'atico desde el punto de vista de la teor\'ia de probabilidad pero si no contamos con la sufiente cantidad de muestras va a surgir un problema denominado {\bf overfitting}.
+
+
+
+
+
+
+
+\subsection{T\'erminos de regularizaci\'on}
+
+\subsection{La descomposici\'on sesgo-varianza}
+
+\section{Los ajustes lineales}
+
+\section{Los ajustes log\'isticos}
+
+\section{La lecci\'on que nos dejan los modelos de ajustes sobre ML}
