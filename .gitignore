@@ -14,3 +14,7 @@
 # Optional: Ignore the generated PDF if you only want to store the code source
 # *.pdf
 *.obsidian
+
+.venv/
+__pycache__/
+*.pyc
