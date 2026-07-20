@@ -1,6 +1,6 @@
 
 \chapter{Introducci\'on a Teor\'ia de Informaci\'on}
-En 1948 Shannon publica un trabajo llamado ``A mathematical theory of communication''. En este Shannon intenta resolver un problema fundamental de las comunicaciones: 
+En 1948 Claude Shannon publica un trabajo llamado ``A mathematical theory of communication''. En este Shannon intenta resolver un problema fundamental de las comunicaciones: 
 \begin{center}
     {\it
         Para reducir la probabilidad de error al enviar un mensaje lo m\'as simple es repetirlo. Y de repetirlo infinitas veces el error tiende a 0 ¿Es posible hacer algo mejor que esto?
@@ -8,7 +8,7 @@ En 1948 Shannon publica un trabajo llamado ``A mathematical theory of communicat
 \end{center}
 En este trabajo, Shannon demuestra que hay maneras mucho más eficientes de transimitir mensajes sin probabilidad de error. Ese logro lo motiva a publicar un libro el año siguiente junto a Warren Weaver con el nombre de ``The mathematical theory of communication''. Es decir, asciende su obra de decir que es una teor\'ia a decir que es {\it la teor\'ia} de la comunicaci\'on.
 
-Evidentemente este problema de las telecomunicaciones no es el inter\'es de estas notas. Sin embargo lo que es increíble es como esta teoría resultó de gran utilidad en áreas muy diversas: informática, inferencia estadística (que si nos interesa), física, neurociencias, música, biología, finanzas, etc. Es realmente poco razonable lo \'util que result\'o esta teor\'ia sujeto a que naci\'o de resolver un problema de ingenier\'ia muy concreto. Nosotros nos vamos a centrar en las aplicaciones de esta a probabilidad, inferencia estad\'istica y Machine Learning.
+Evidentemente este problema de las telecomunicaciones no es el inter\'es de estas notas. Sin embargo lo que es increíble es como esta teoría resultó de gran utilidad en áreas muy diversas: informática, inferencia estadística (que si nos interesa), física, neurociencias, música, biología, finanzas, etc. Es realmente poco razonable lo \'util que result\'o esta teor\'ia sujeto a que naci\'o de resolver un problema de ingenier\'ia muy concreto. Nosotros nos vamos a centrar en las aplicaciones de esta a probabilidad, inferencia estad\'istica y Machine Learning. De hecho, el impacto de la teor\'ia de Claude Shannon a los modelos de lenguajes es tal que Antropic nombra a su conocido LLM Claude.
 
 Si bien la teor\'ia de informaci\'on est\'a desarrollada tanto en variables aleatorias discretas como continuas -y con formulas muy similares- hay diferencias conceptuales que hacen que se tengan que estudiar teoricamente de forma difente. Estas diferencias no son superfluas y tienen consecuencias muy relevantes. De hecho, se suele decir que la definici\'on para variables aleatorias continuas ``no funciona tan bien'', lo que motiv\'o que hayan aparecido muchas alternativas a esta.
 \section{La entrop\'ia de Shannon}
@@ -36,7 +36,7 @@ Esto motiva la definici\'on de entrop\'ia. Un mito interesante sobre esta ecuaci
         H(X) = -\sum_i p_i \log_a p_i,
         \label{3:eq:Shannon}
     \end{equation}
-    donde $a$ es un real mayor a 1. La elecci\'on m\'as t\'ipica es $a=2$, y en este caso la unidad con la que se mide la entrop\'ia es el {\bf bit}.
+donde $a$ es un real mayor a 1. La elecci\'on m\'as t\'ipica es $a=2$, y en este caso la unidad con la que se mide la entrop\'ia es el {\bf bit}.
 \end{definition}
 Una aclaraci\'on importante es que la entrop\'ia no es una funci\'on de los resultados posibles, es una funci\'on de la distribuci\'on de probabilidad entera. Pero tambi\'en es com\'un encontrar la siguiente definici\'on.
 \begin{definition}

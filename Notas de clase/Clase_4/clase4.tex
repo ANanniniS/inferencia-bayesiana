@@ -26,6 +26,26 @@ $$
 
 Una vez definida la funci\'on de perdida, que castiga la definici\'on de curvas alejadas a los puntos medidos, se eligen los par\'ametros que minimizan esta cantidad. Utilizando esta funci\'on de perdida se suele hablar de {\bf m\'inimos cuadrados}. 
 
+\subsection{Simulaci\'on de una colonia de bacterias}
+Para ser m\'as concretos con lo que estuvimos realizando hasta ahora vamos a trabajar con datos artificiales. Vamos a simular la poblaci\'on de una colonia de bacterias y a esa simulaci\'on vamos a modelar que adquirimos informaci\'on de la colonia con un medio ruidoso (sea contandolas o sacando una foto que las intente contar autom\'aticamente).
+
+Para la simulaci\'on de la evoluci\'on de colonias vamos a arrancar el tiempo en un instante $T_0$ con una cantidad de bacterias $N_0$. Vamos a discretizar la simulaci\'on en intervalos de tiempo pequeños $dt$. Como es un intervalo de tiempo muy pequeño cada bacteria a lo sumo va a poder duplicarse una vez (podr\'iamos complicarla m\'as, pero cuando $dt\to 0$ esta manera va a dar resultados tan buenos como m\'etodos m\'as sofisticados). La probabilidad de duplicaci\'on va a crecer linealmente con el tiempo, entonces la probabilidad de duplicaci\'on va a ser $\gamma dt$. Luego, en cada iteraci\'on la cantidad siguiente de bacterias va a ser la cantidad anterior m\'as las bacterias que se duplicaron. 
+Con esto vamos a tener definida como es la evoluci\'on real de la colonia.
+
+Luego, vamos a suponer que cuando estamos midiendo elegimos de antemano los momentos donde hacemos una foto. En los instantes donde se den las fotos interpolamos la cantidad de bacterias con lo realizado en la simulaci\'on y a ese resultado lo multiplicamos por un factor de ruido. Es decir, el ruido es proporcional a la cantidad real. En estas situaciones se suele optar por una distribuci\'on de ruido log-normal.
+
+Algunas consideraciones importantes de la simulaci\'on. En primer lugar estamos modelando un proceso estoc\'astico de tiempo continuo. Esto significa que algo que pretendemos es que cuando tendemos $dt$ a 0 lleguemos a una situaci\'on l\'imite. En el caso del c\'alculo tender el l\'imite a 0 es sencillo: la tendencia existe si se llega a un \'unico valor. Sin embargo, en los procesos estoc\'asticos aunque se est\'e en un mismo sistema con mismas condiciones iniciales se puede llega a resultados num\'ericos diferentes. Entonces es importante entender que llegar a una situaci\'on l\'imite en este caso significa llegar a iguales distribuciones de probabilidad y misma estructura condicional. Dicho de forma más concreta, los valores que nos garantizan haber llegado a una convergencia es una situación estacionaria de las probabilidades $P((N_1,t_1)|(N_2,t_2))$.
+
+Adem\'as debe estar claro que nuestro modelo ignora la posibilidad de que una bacteria se duplique dos veces en un mismo intervalo (eso lo podr\'iamos corregir utilizando una distribuci\'on de Poisson) o que las bacterias hijas se reproduzcan en el mismo intervalo. Podr\'iamos ir mejorando la aproximaci\'on considerando m\'as y m\'as fenomenolog\'ia, pero es importante recordar que si hicimos las cosas bien incluso nuestro modelo m\'as simple deber\'ia ser capaz de recuperar el sistema exacto cuando $dt$ tiende a 0. 
+
+
+Los resultados se pueden ver en la figura dfadda. En este caso se puede ver como la estimaci\'on de $\gamma$ es bastante buena mientra que la de $N_0$ es tirando a pobre. Esto no es un problema de esta realización de la simulación pues de repetirla se puede llegar a estas conclusiones en términos estadísticos. La raz\'on de esto es el modelo exponencial de poblaciones. Cuando el sistema arranca es muy sensible al azar de si las pocas bacterias existentes se duplican o no. Con un poco de mala suerte la primer celula tarda un poco más en duplicarse, lo que conlleva que la curva final que tenga un parámetro $N_0$ menor que el que tenía la población realmente. Es decir, $N_0$ es un parámetro de la curva que cuando la población es grande coincide dignamente con la población inicial, pero cuando la población es pequeña no. En cambio el $\gamma$ est\'a presente en toda la curva y mientras m\'as grande es la poblaci\'on m\'as f\'acil va a ser determinarlo porque la curva a va estar menos sujeta a efectos estad\'isticos y se va a comportar como una funci\'on exponencial determinista (sin contar el ruido propio de la medici\'on). Digamos, este primer problema es a nivel modelo. Es nuestro modelo el que est\'a fallando en esto.
+
+Sin embargo tambi\'en hay fallas estad\'isticas. En primer lugar todas las diferencias cuadr\'aticas castigan de igual forma las diferencias. Entonces cuando la poblaci\'on es pequeña una diferencia de 1, no representa nada frente a las diferencias de $10^5$ que se pueden observar cuando la poblaci\'on es grande. Esto tiene como consecuencia que el modelo tiene una preferencia por ajustar mejor a valores grandes (donde es mucho menos relevante el valor inicial de poblaci\'on).
+
+
+
+
 \section{Interpretaci\'on bayesiana de los procesos de ajuste}
 Con el objetivo de obtener resultados m\'as generales vamos a abstraer un poco m\'as la situaci\'on. Supongamos que queremos predecir el valor de una variable aleatoria $T$. Tenemos un modelo que nos dice que est\'a compuesto de la siguiente forma
 \begin{equation}
@@ -36,6 +56,7 @@ donde $f$ es una funci\'on que depende de dos tipos de par\'ametros: los ocultos
 Si el ruido es gaussiano de media nula y desviaci\'on est\'andar $\sigma$ entonces estamos diciendo que nuestro sistema estad\'istico sigue la siguiente ley
 \begin{equation}
     P(t|\mathbf{x},\theta) = \mathcal{N}(t|f(\mathbf{x},\theta),\sigma^2).
+    \label{4:eq:error}
 \end{equation}
 Supongamos que hacemos $N$ mediciones con valores controlables $\mathbf{x}_1,...,\mathbf{x}_N$ que dieron como resultado $t_1,...,t_N$. Como el objetivo es obtener el valor de los par\'ametros $\theta$ vamos a utilizar el estimador maximum likelyhood. Es decir vamos a maximizar la cantidad $P(t_1,...,t_N|(\mathbf{x}_1,...,\mathbf{x}_N),\theta)$. Asumiendo que las mediciones son condicionalmente independientes la verosimilitud est\'a dada por
 \begin{equation}
@@ -46,20 +67,46 @@ Y por supuesto, maximizarla es equivalente a maximizar su logaritmo. Por lo que 
     \mathcal{L}(\theta) = \sum \ln P(t_i|\mathbf{x}_i,\theta) = -\frac{1}{2\sigma^2} \sum (f(\mathbf{x}_i,\theta)-t_i)^2.
 \end{equation}
 
-Entonces lo que vemos es sencillo, vemos que la t\'ecnica de m\'inimos cuadrados de la estad\'istica puede ser interpretada como ML desde un punto de vista bayesiano asumiendo errores gaussianos.
+Entonces lo que vemos es sencillo, vemos que la t\'ecnica de m\'inimos cuadrados de la estad\'istica puede ser interpretada como Maximum likelyhood desde un punto de vista bayesiano asumiendo errores gaussianos en las mediciones.
 
-\subsection{El overfitting}
+
+
+Volviendo al ejemplo de las bacterias. Nosotros ac\'a asumimos independencia entre las mediciones frente a par\'ametros fijos. Esto lo podemos hacer cuando hay una curva par\'ametrica escondida determinista que solo depende de los par\'ametros y no de un azar estructurado por ellos. Cuando la poblaci\'on es grande la evoluci\'on es casi determinista siguiendo el modelo exponencial, all\'i es v\'alido aproximar como si las mediciones fueran independientes frente a par\'ametros fijos. Sin embargo cuando la poblaci\'on es pequeña el rol de los par\'ametros es estructurar estad\'isticamente la evoluci\'on del sistema, pero esa estructura hace que haya correlaci\'on entre mediciones consecutivas, arruinando nuestro modelo.
+
+Otro problema del ejemplo de las bacterias es que el ajuste de m\'inimos cuadrados desarrollado en esta secci\'on exige que todos los errores vengan de una normal de la misma varianza en contraposici\'on a nuestro modelo que daba m\'as ruido a mediciones m\'as grandes. Por lo que esa suposici\'on tambi\'en es errada.
+
+Si bien hicimos un tratamiento de hablar de una funcion escondida m\'as un error gausseano, podr\'iamos cambiarlo por un error multiplicativo o de cualquier tipo. Sencillamente deber\'iamos cambiar la ecuaci\'on (\ref{4:eq:error}) por la distribuci\'on final correcta (dependiente de par\'ametros y variables independientes).
+
+
+\subsection{Realizando predicciones con el resultado de ajustes}
+De forma muy similar al cap\'itulo 2, muchas veces podemos estar muy interesados en hacer predicciones m\'as que determinar el valor de par\'ametros $\theta$. En particular, ahora quisieramos hacer predicciones de $t$ habiendo fijado los valores en las variable independientes $\mathbf{X}$.
+
+Nuevamente, podemos elegir una estimaci\'on puntual de los par\'ametros y luego realizar la predicci\'on utilizandolos. Tambi\'en podr\'iamos estimar su incerteza considerando un error gausseano (cuya magnitud tambi\'en puede ser estimada puntualmente).
+
+Y siempre tenemos la alternativa de considerar la incerteza sobre los par\'ametros. Es decir, como los consideramos variables aleatorias podemos hacer la predicci\'on de $t$ marginando sobre su probabilidad
+
+\begin{equation}
+    P(t|\mathbf{X}) = \int_\Theta P(t|\mathbf{X},\theta)P(\theta) d\theta
+\end{equation}
+con $P(\theta)$ la posteriori de $\theta$ luego de ser actualizada con todas las mediciones.
+
+
+\subsection{Ejemplicando las inferencias.}
+A modo de ejemplicar, consideramos el caso donde $f(x,w_0,w_1) = w_1 x +w_0$. Supongamos que tenemos un conjunto de mediciones $x_n$ que han tenido como resultado valores $t_n$. Ahora tenemos como objetivo utilizar estas mediciones para predecir el valor de $t$ cuando $x=x^*$.
+
+En primer lugar, como encaramos de un enfoque bayesiano necesitamos definir una priori sobre los par\'ametros $(w_0,w_1)$. En este caso fijamos una distribuci\'on uniforme en el rect\'agulo $[0,1]^2$. Por lo que $P(w_0,w_1)=1$.
+
+
+
+\subsection{El overfitting. El trade-off sesgo-varianza.}
 Es muy usual encontrar diferentes modelos de ajustes que dependen de muchisimos par\'ametros. En esta categor\'ia podriamos encontrar a cualquier modelo de redes neuronales. Esto podr\'ia no paracer problem\'atico desde el punto de vista de la teor\'ia de probabilidad pero si no contamos con la sufiente cantidad de muestras va a surgir un problema denominado {\bf overfitting}.
-
-
-
-
-
-
 
 \subsection{T\'erminos de regularizaci\'on}
 
 \subsection{La descomposici\'on sesgo-varianza}
+
+
+\subsection{Predicciones bayesianas de un modelo de regresi\'on.}
 
 \section{Los ajustes lineales}
 
